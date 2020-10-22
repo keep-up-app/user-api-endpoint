@@ -1,0 +1,33 @@
+{
+    "name": "user-api-endpoint",
+    "version": "1.0.0",
+    "description": "Handles everything that has to do with KeepUp users",
+    "main": "server.js",
+    "scripts": {
+        "start": "node server.js",
+        "watch": "nodemon server.js",
+        "test": "mocha test/* --exit"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/noahgreff/user-api-endpoint.git"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/noahgreff/user-api-endpoint/issues"
+    },
+    "homepage": "https://github.com/noahgreff/user-api-endpoint#readme",
+    "dependencies": {
+        "body-parser": "^1.19.0",
+        "custom-env": "^2.0.1",
+        "express": "^4.17.1",
+        "mongoose": "^5.10.9",
+        "nodemon": "^2.0.6",
+        "unique-names-generator": "^4.3.1"
+    },
+    "devDependencies": {
+        "express-list-endpoints": "^5.0.0"
+    }
+}
