@@ -25,6 +25,12 @@ router.post('/', async(req, res) => {
 
 
 
+
+
+
+
+
+
 // create user
 router.post('/new', (req, res) => {
 
@@ -69,12 +75,4 @@ router.get("/find/:id", (req, res) => {
             res.sendStatus(404);
         }
     });
-});
-
-router.get('/', async(req, res) => {
-
-    const user = await User.find()
-        .catch(err => res.status(400).json({ error: err }));
-
-    res.json({ user: user });
 });

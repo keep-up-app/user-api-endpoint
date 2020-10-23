@@ -28,6 +28,9 @@
         "unique-names-generator": "^4.3.1"
     },
     "devDependencies": {
-        "express-list-endpoints": "^5.0.0"
+        "chai": "^4.2.0",
+        "express-list-endpoints": "^5.0.0",
+        "mocha": "^8.2.0",
+        "supertest": "^5.0.0"
     }
 }
