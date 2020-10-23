@@ -64,7 +64,7 @@ function validatePassword(password) {
     }
 
     if (!containsInt || !containsChar)
-        return 'Password must be alphanumeric.';
+        return 'Password must be alphanumerical.';
 
     return null;
 }
