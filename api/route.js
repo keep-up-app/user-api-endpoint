@@ -10,7 +10,7 @@ module.exports = router;
 
 
 
-router.post('/', async(req, res) => {
+router.post('/create', async(req, res) => {
 
     let email = req.body.email;
     let password = req.body.password;
