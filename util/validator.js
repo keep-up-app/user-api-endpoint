@@ -13,7 +13,7 @@ module.exports.make = fields => {
         var field = fields[key];
 
         if (field === undefined || field == "")
-            return `Invalid ${key} entered.`;
+            return `Missing ${key}.`;
 
         if (key == 'password')
             error = validatePassword(field);
