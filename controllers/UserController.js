@@ -14,9 +14,17 @@ const generator = require('../util/generator');
 const mongoose = require("mongoose");
 const User = mongoose.model("User");
 
+module.exports = {
+    create,
+    update,
+    destroy,
+    find
+}
+
 
 /**
- * Creates new User while check for cred valididty with input:
+ * Creates new User while check for cred valididty with input
+ * 
  * params = {
  *    email: example@email.com,
  *    password: password12345
@@ -27,18 +35,15 @@ const User = mongoose.model("User");
 
 function create(params) {
     return new Promise(async(resolve, reject) => {
+        
+        let invalid = validator.make(params);
+        if (invalid) reject(invalid);
+        
+        let matching = find({ email: email }).catch(err => reject(err));
+        if (matching) reject('User already exists.');
 
         let email = params.email;
         let password = params.password;
-
-        let invalid = validator.make({
-            'email': email,
-            'password': password
-        });
-        if (invalid) reject(invalid);
-
-        let matching = await findAnyMatching({ email: email });
-        if (matching) reject('User already exists.');
 
         var user = new User({
             username: generator.generateUsername,
@@ -46,71 +51,98 @@ function create(params) {
             password: password,
         });
 
-        user.save().catch(err => reject("An error occured while saving user."));
-
-        resolve(user);
+        user.save()
+            .then(res => resolve(user))
+            .catch(err => reject("An error occured while registering user."));
     });
 }
 
 
-module.exports = {
-    create
-}
-
-
-
-
-
-
-
-
 /**
- * Finds any user matching given paramater. Example:
+ * Finds any user matching given paramater. Example
  * 
  * params = {
+ *    email: example@email.com,
  *    username: example,
- *    email: example@email.com
+ *    steamid: 12345567788513
  * }
  * 
- * will return the first user with matching paramaters
- * 
  * @param {Object} params 
- * @returns {User}
  */
 
-async function findAnyMatching(params) {
+function find(params) {
+    return new Promise(async(resolve, reject) => {
 
-    var user = null;
+        let invalid = validator.make(params);
+        if (invalid) reject(invalid);
 
-    await User.find(params)
-        .then((users) => {
-            user = users[0];
-        })
-        .catch((err) => { throw err });
-
-    return user;
-}
+        var user = await User.find(params)
+            .then(users => users[0])
+            .catch(err => reject("Error finding User: " + err.message));
+        
+        if (!user) reject("Could not find any User")
+        else resolve(user);
+    });
+};
 
 
 /**
- * Finds user asynchronously by Id while also handling whether id is a valid ObjectId to prevent errors
+ * Updates user with given params:
  * 
- * @param {ObjectId} id
- * @returns {User}
+ * params = {
+ *    find: {
+ *       steamid: 12345567788513
+ *       email: example@email.com,
+ *       username: example,
+ *    },
+ *    with: {
+ *       username: newUsername,
+ *    }
+ * }
+ * 
+ * @param {Object} params 
  */
 
-async function findById(id) {
+function update(params) {
+    return new Promise(async(resolve, reject) => {
 
-    var user = null;
+        let invalid = validator.make(params.find);
+        if (invalid) reject(invalid);
 
-    if (id.match(/^[0-9a-fA-F]{24}$/)) {
+        let user = await find(params.find).catch(err => reject(err));
 
-        await User.findById(id)
-            .then((users) => {
-                user = users;
-            })
-            .catch((err) => { throw err });
-    }
+        for(field in params.with)
+            user.field = params.with[field];
 
-    return user;
+        await user.save().catch(err => reject("Error updating User: " + err.message));
+        
+        resolve(user);
+    });
+};
+
+
+/**
+ * Destroys user based on params:
+ * 
+ * params = {
+ *    email: example@email.com,
+ *    username: example,
+ *    steamid: 12345567788513
+ * }
+ * 
+ * @param {Object} params
+ */
+
+function destroy(params) {
+    return new Promise(async(resolve, reject) => {
+
+        let invalid = validator.make(params);
+        if (invalid) reject(invalid);
+
+        let user = await find(params).catch(err => reject(err));
+
+        user.destroy()
+            .then(res => resolve("User profile deleted :("))
+            .catch(err => reject("Error removing User porfile. Maybe he doesn't want you to go..."));
+    });
 }

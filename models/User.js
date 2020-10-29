@@ -20,6 +20,10 @@ const userSchema = new Schema({
         type: String,
         require: true
     },
+    steamid: {
+        type: String,
+        require: false
+    },
     created_at: {
         type: Date,
         default: Date.now

@@ -19,11 +19,25 @@ module.exports.make = fields => {
             error = validatePassword(field);
         else if (key == 'email')
             error = validateEmail(field);
+        else if (key == '_id')
+            error = validateId
 
         if (error) return error;
     }
 
     return error;
+}
+
+
+/**
+ * Validates Sequelize Id
+ * @param {String} id 
+ */
+
+function validateId(id) {
+    if (!id.match(/^[0-9a-fA-F]{24}$/))
+        return 'Invalid Sequelize ID';
+    return null;
 }
 
 

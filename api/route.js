@@ -9,70 +9,41 @@ const router = express.Router();
 module.exports = router;
 
 
+/**
+ * Creats new user with given params
+ * 
+ * URI: user/create
+ */
 
 router.post('/create', async(req, res) => {
 
-    let email = req.body.email;
-    let password = req.body.password;
+    let params = req.body;
 
-    const user = await UserController.create({
-        email,
-        password
-    }).catch(err => res.status(400).json({ error: err }));
+    const user = await UserController.create(params
+        .catch(err => res.status(400).json({ error: err })));
 
-    res.json({ user: user });
+    res.json(user);
+});
+
+
+/**
+ * Gets user with given params
+ * 
+ * URI: user/find
+ */
+
+router.get('/find', async(req, res) => {
+    
+    let params = req.query;
+
+    if (params.password) res.status(403).json({ error: "Cannot find User with password." });
+
+    const user = await UserController.find(params)
+        .catch(err => res.status(400).send({ error: err }));
+
+    res.json(user);
 });
 
 
 
 
-
-
-
-
-
-// create user
-router.post('/new', (req, res) => {
-
-    const email = req.body.email;
-
-    UserController.findAnyMatching({ email: email }).then((user) => {
-
-        if (user == null) {
-
-            var user = new User({
-                username: req.body.username,
-                password: req.body.password,
-                email: req.body.email,
-                phone: req.body.phone
-            });
-
-            user.save()
-                .then(() => {
-                    log("User " + req.body.username + " Saved")
-                })
-                .catch((err) => { throw err });
-
-            res.send(user);
-
-        } else {
-            res.send({
-                message: "Email already taken.",
-            });
-        }
-    });
-});
-
-
-router.get("/find/:id", (req, res) => {
-
-    const id = req.params.id;
-
-    UserController.findById(id).then((user) => {
-        if (user != null) {
-            res.json(user);
-        } else {
-            res.sendStatus(404);
-        }
-    });
-});
