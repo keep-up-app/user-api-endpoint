@@ -91,9 +91,7 @@ function find(params) {
  * 
  * params = {
  *    find: {
- *       steamid: 12345567788513
- *       email: example@email.com,
- *       username: example,
+ *       id: 12345567788513
  *    },
  *    with: {
  *       username: newUsername,

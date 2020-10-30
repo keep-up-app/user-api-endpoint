@@ -11,8 +11,9 @@ module.exports = router;
 
 /**
  * Creats new user with given params
- * 
  * URI: user/create
+ * 
+ * @method {POST}
  */
 
 router.post('/create', async(req, res) => {
@@ -20,30 +21,69 @@ router.post('/create', async(req, res) => {
     let params = req.body;
 
     const user = await UserController.create(params
-        .catch(err => res.status(400).json({ error: err })));
+        .catch(err => { return res.send({ error: err }) }));
 
-    res.json(user);
+    if (user) return res.json(user);
+    else return res.sendStatus(500);
 });
 
 
 /**
  * Gets user with given params
- * 
  * URI: user/find
+ * 
+ * @method {GET}
  */
 
 router.get('/find', async(req, res) => {
     
     let params = req.query;
 
-    if (params.password) res.status(403).json({ error: "Cannot find User with password." });
+    if (params.password) res.status(403).json({ error: "Operation not permitted." });
 
-    const user = await UserController.find(params)
-        .catch(err => res.status(400).send({ error: err }));
+    let user = await UserController.find(params)
+        .catch(err => { return res.send({ error: err }) });
 
-    res.json(user);
+    if (user) return res.json(user);
+    else return res.sendStatus(500);
 });
 
 
+/**
+ * Updates user by ID with given body paramaters
+ * URI: user/update
+ * 
+ * @method {PUT}
+ */
+
+router.put('/update', async(req, res) => {
+    
+    let retrieve = req.query;
+    let params = req.body;
+    
+    let user = await UserController.update({
+        find: retrieve,
+        with: params 
+    }).catch(err => { return res.send({ error: err }) });
+    
+    if (user) return res.json(user);
+    else return res.sendStatus(500);
+});
 
 
+/**
+ * Destroys USER record matching params and sends message response
+ * URI: user/destroy
+ *  
+ * @method {DELETE}
+ */
+
+router.delete('/destroy', async(req, res) => {
+
+    let params = req.query;
+
+    let message = await UserController.destroy({params})
+        .catch(err => { return res.send({ error: err }) });
+
+    if (message) return res.send({ success: message });
+});
