@@ -21,7 +21,7 @@ router.post('/create', async(req, res) => {
     let params = req.body;
 
     const user = await UserController.create(params)
-        .catch(err => { return res.send({ error: err }) });
+        .catch(err => { return res.status(400).send({ error: err }) });
 
     if (user) return res.json(user);
     else return res.sendStatus(500);
@@ -42,7 +42,7 @@ router.get('/find', async(req, res) => {
     if (params.password) res.status(403).send({ error: "Operation not permitted." });
 
     let user = await UserController.find(params)
-        .catch(err => { return res.send({ error: err }) });
+        .catch(err => { return res.status(400).send({ error: err }) });
 
     if (user) return res.json(user);
     else return res.sendStatus(500);
@@ -64,7 +64,7 @@ router.put('/update', async(req, res) => {
     let user = await UserController.update({
         find: retrieve,
         with: params 
-    }).catch(err => { return res.send({ error: err }) });
+    }).catch(err => { return res.status(400).send({ error: err }) });
     
     if (user) return res.json(user);
     else return res.sendStatus(500);
@@ -85,5 +85,5 @@ router.delete('/destroy', async(req, res) => {
     let message = await UserController.destroy({params})
         .catch(err => { return res.send({ error: err }) });
 
-    if (message) return res.send({ success: message });
+    if (message) return res.status(400).send({ success: message });
 });
