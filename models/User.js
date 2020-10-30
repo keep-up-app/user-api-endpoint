@@ -29,7 +29,8 @@ const userSchema = new Schema({
     },
     steamid: {
         type: Number,
-        require: false
+        require: true,
+        default: null
     },
     created_at: {
         type: Date,

@@ -44,7 +44,7 @@ router.get('/find', async(req, res) => {
     let user = await UserController.find(params)
         .catch(err => { return res.status(400).send({ error: err }) });
 
-    if (user) return res.json(user);
+    if (user) return res.send(user);
     else return res.sendStatus(500);
 });
 
