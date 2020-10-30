@@ -26,7 +26,8 @@
         "express-list-endpoints": "^5.0.0",
         "mongoose": "^5.10.9",
         "nodemon": "^2.0.6",
-        "unique-names-generator": "^4.3.1"
+        "unique-names-generator": "^4.3.1",
+        "uuid": "^8.3.1"
     },
     "devDependencies": {
         "chai": "^4.2.0",

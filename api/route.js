@@ -20,8 +20,8 @@ router.post('/create', async(req, res) => {
 
     let params = req.body;
 
-    const user = await UserController.create(params
-        .catch(err => { return res.send({ error: err }) }));
+    const user = await UserController.create(params)
+        .catch(err => { return res.send({ error: err }) });
 
     if (user) return res.json(user);
     else return res.sendStatus(500);
@@ -39,7 +39,7 @@ router.get('/find', async(req, res) => {
     
     let params = req.query;
 
-    if (params.password) res.status(403).json({ error: "Operation not permitted." });
+    if (params.password) res.status(403).send({ error: "Operation not permitted." });
 
     let user = await UserController.find(params)
         .catch(err => { return res.send({ error: err }) });
@@ -60,7 +60,7 @@ router.put('/update', async(req, res) => {
     
     let retrieve = req.query;
     let params = req.body;
-    
+
     let user = await UserController.update({
         find: retrieve,
         with: params 

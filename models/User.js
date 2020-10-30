@@ -11,7 +11,14 @@ const { Schema } = mongoose;
  */
 
 const userSchema = new Schema({
-    username: String,
+    _id: {
+        type: String,
+        require: true
+    },
+    username: {
+        type: String,
+        require: true
+    },
     password: {
         type: String,
         require: true
@@ -21,7 +28,7 @@ const userSchema = new Schema({
         require: true
     },
     steamid: {
-        type: String,
+        type: Number,
         require: false
     },
     created_at: {
@@ -30,7 +37,8 @@ const userSchema = new Schema({
     }
 }, {
     versionKey: false,
-    timestamps: false
+    timestamps: false,
+    _id: false
 });
 
 

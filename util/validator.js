@@ -20,7 +20,9 @@ module.exports.make = fields => {
         else if (key == 'email')
             error = validateEmail(field);
         else if (key == '_id')
-            error = validateId
+            error = validateUuid(field);
+        else if (key == 'steamid')
+            error = validateSteamId(field);
 
         if (error) return error;
     }
@@ -30,13 +32,38 @@ module.exports.make = fields => {
 
 
 /**
+ * Validates UUID key
+ * @param {String} id 
+ */
+
+function validateUuid(uuid) {
+    let regex = /^[A-F\d]{8}-[A-F\d]{4}-4[A-F\d]{3}-[89AB][A-F\d]{3}-[A-F\d]{12}$/i;
+    if (!uuid.match(regex))
+        return 'Invalid Uuid.';
+    return null;
+}
+
+
+/**
+ * Validate SteamID
+ * @param {String} id 
+ */
+
+ function validateSteamId(id) {
+     if (id.length != 17)
+        return "Invalid Steam ID.";
+    return null;
+ }
+
+
+/**
  * Validates Sequelize Id
  * @param {String} id 
  */
 
 function validateId(id) {
     if (!id.match(/^[0-9a-fA-F]{24}$/))
-        return 'Invalid Sequelize ID';
+        return 'Invalid Sequelize ID.';
     return null;
 }
 

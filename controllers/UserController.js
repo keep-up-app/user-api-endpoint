@@ -37,29 +37,35 @@ function create(params) {
     return new Promise(async(resolve, reject) => {
         
         let invalid = validator.make(params);
-        if (invalid) reject(invalid);
+        if (invalid) return reject(invalid);
         
-        let matching = find({ email: email }).catch(err => reject(err));
-        if (matching) reject('User already exists.');
-
         let email = params.email;
         let password = params.password;
 
-        var user = new User({
+        if (password != params.password_repeated)
+            return reject("Password does not match.");
+
+        let anyMatching = await User.findOne({ email: email })
+            .catch(err => reject(err));
+        if (anyMatching) return reject('User already exists.');
+
+        let user = new User({
+            _id: generator.generateUUID,
             username: generator.generateUsername,
             email: email,
             password: password,
         });
 
-        user.save()
-            .then(res => resolve(user))
-            .catch(err => reject("An error occured while registering user."));
+        let info = await user.save()
+            .catch(err => reject("An error occured while registering User"));
+    
+        if (info) resolve(info);
     });
 }
 
 
 /**
- * Finds any user matching given paramater. Example
+ * Finds any user matching given paramaters
  * 
  * params = {
  *    email: example@email.com,
@@ -74,14 +80,14 @@ function find(params) {
     return new Promise(async(resolve, reject) => {
 
         let invalid = validator.make(params);
-        if (invalid) reject(invalid);
+        if (invalid) return reject(invalid);
 
         var user = await User.find(params)
             .then(users => users[0])
             .catch(err => reject("Error finding User: " + err.message));
         
-        if (!user) reject("Could not find any User")
-        else resolve(user);
+        if (!user) return reject("Could not find any User")
+        else return resolve(user);
     });
 };
 
@@ -91,7 +97,7 @@ function find(params) {
  * 
  * params = {
  *    find: {
- *       id: 12345567788513
+ *       id: 76561198017260467
  *    },
  *    with: {
  *       username: newUsername,
@@ -104,17 +110,18 @@ function find(params) {
 function update(params) {
     return new Promise(async(resolve, reject) => {
 
-        let invalid = validator.make(params.find);
-        if (invalid) reject(invalid);
+        let pfind = validator.make(params.find);
+        let pwith = validator.make(params.with);
+        if (pfind || pwith) return reject(pfind || pwith);
 
-        let user = await find(params.find).catch(err => reject(err));
+        let user = await this.find(params.find).catch(err => reject(err));
 
         for(field in params.with)
             user.field = params.with[field];
 
         await user.save().catch(err => reject("Error updating User: " + err.message));
         
-        resolve(user);
+        return resolve(user);
     });
 };
 
@@ -135,7 +142,7 @@ function destroy(params) {
     return new Promise(async(resolve, reject) => {
 
         let invalid = validator.make(params);
-        if (invalid) reject(invalid);
+        if (invalid) return reject(invalid);
 
         let user = await find(params).catch(err => reject(err));
 
