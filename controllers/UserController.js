@@ -16,9 +16,9 @@ const User = mongoose.model("User");
 
 module.exports = {
     create,
+    find,
     update,
-    destroy,
-    find
+    destroy
 }
 
 
@@ -36,18 +36,24 @@ module.exports = {
 function create(params) {
     return new Promise(async(resolve, reject) => {
         
-        let invalid = validator.make(params);
-        if (invalid) return reject(invalid);
+        await validator.make(params).catch(err => reject(err));
         
         let email = params.email;
         let password = params.password;
 
         if (password != params.password_repeated)
-            return reject("Password does not match.");
+            return reject({ 
+                message: "Password does not match.", 
+                code: 400 
+            });
 
         let anyMatching = await User.findOne({ email: email })
             .catch(err => reject(err));
-        if (anyMatching) return reject('User already exists.');
+
+        if (anyMatching) return reject({ 
+            message: "User already exists.",
+            code: 400 
+        });
 
         let user = new User({
             _id: generator.generateUUID,
@@ -56,10 +62,13 @@ function create(params) {
             password: password,
         });
 
-        let info = await user.save()
-            .catch(err => reject("An error occured while registering User"));
-    
-        if (info) resolve(info);
+        await user.save().catch(err => reject({ 
+            message: "An error occured while registering User",
+            details: err.message, 
+            code: 500
+        }));
+        
+        return resolve(user);
     });
 }
 
@@ -70,7 +79,7 @@ function create(params) {
  * params = {
  *    email: example@email.com,
  *    username: example,
- *    steamid: 12345567788513
+ *    steamid: 76561198017260430
  * }
  * 
  * @param {Object} params 
@@ -79,15 +88,28 @@ function create(params) {
 function find(params) {
     return new Promise(async(resolve, reject) => {
 
-        let invalid = validator.make(params);
-        if (invalid) return reject(invalid);
+        if (params.password) return reject({
+            message: "Operation not permitted",
+            details: "Cannot search User by password",
+            code: 403
+        });
+        
+        await validator.make(params).catch(err => reject(err));
 
         var user = await User.find(params)
             .then(users => users[0])
-            .catch(err => reject("Error finding User: " + err.message));
+            .catch(err => reject({
+                message: "Error finding User",
+                details: err.message,
+                code: 500,
+            }));
         
-        if (!user) return reject("Could not find any User")
-        else return resolve(user);
+        if (!user) return reject({
+            message: "User not found.",
+            code: 404
+        });
+        
+        return resolve(user);
     });
 };
 
@@ -97,7 +119,7 @@ function find(params) {
  * 
  * params = {
  *    find: {
- *       id: 76561198017260467
+ *       _id: 693e6779-a6a2-484f-84d4-abc898f50bd2
  *    },
  *    with: {
  *       username: newUsername,
@@ -110,18 +132,23 @@ function find(params) {
 function update(params) {
     return new Promise(async(resolve, reject) => {
 
-        let pfind = validator.make(params.find);
-        let pwith = validator.make(params.with);
-        if (pfind || pwith) return reject(pfind || pwith);
+        await validator.make(params.find).catch(err => reject(err));
+        await validator.make(params.with).catch(err => reject(err));
 
-        let user = await this.find(params.find).catch(err => reject(err));
-
-        for(field in params.with)
-            user.field = params.with[field];
-
-        await user.save().catch(err => reject("Error updating User: " + err.message));
+        var updatedUser = await this.find(params.find).catch(err => reject(err));
         
-        return resolve(user);
+        updatedUser.steamid = parseInt(params.steamid) || updatedUser.steamid;
+        updatedUser.username = params.with['username'] || updatedUser.username;
+        updatedUser.password = params.with['password'] || updatedUser.password;
+        updatedUser.email = params.with['email'] || updatedUser.email;
+
+        await updatedUser.save().catch(err => reject({
+            message: "Error updating User",
+            details: err.message,
+            code: 500
+        }));
+
+        return resolve(updatedUser);
     });
 };
 
@@ -132,7 +159,7 @@ function update(params) {
  * params = {
  *    email: example@email.com,
  *    username: example,
- *    steamid: 12345567788513
+ *    steamid: 76561198017260430
  * }
  * 
  * @param {Object} params
@@ -141,13 +168,16 @@ function update(params) {
 function destroy(params) {
     return new Promise(async(resolve, reject) => {
 
-        let invalid = validator.make(params);
-        if (invalid) return reject(invalid);
+        let user = await this.find(params).catch(err => reject(err));
+        
+        await validator.make(params).catch(err => reject(err));
 
-        let user = await find(params).catch(err => reject(err));
-
-        user.destroy()
-            .then(res => resolve("User profile deleted :("))
-            .catch(err => reject("Error removing User porfile. Maybe he doesn't want you to go..."));
+        user.deleteOne()
+            .then(res => resolve("User profile deleted :'("))
+            .catch(err => reject({
+                message: "Error removing User porfile. Maybe she doesn't want you to go...",
+                details: err.message,
+                code: 500
+            }));
     });
 }
