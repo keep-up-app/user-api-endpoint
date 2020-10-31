@@ -20,7 +20,7 @@ router.post('/create', async(req, res) => {
 
     let params = req.body;
 
-    const user = await UserController.create(params)
+    let user = await UserController.create(params)
         .catch(err => { return res.status(err.code).send({ error: err.message, details: err.details }) });
 
     if (user) return res.json(user);
@@ -37,9 +37,7 @@ router.post('/create', async(req, res) => {
 
 router.get('/find', async(req, res) => {
     
-    let params = req.query;
-
-    let user = await UserController.find(params)
+    let user = await UserController.find(req.query)
         .catch(err => { return res.status(err.code).send({ error: err.message, details: err.details }) });
 
     if (user) return res.send(user);

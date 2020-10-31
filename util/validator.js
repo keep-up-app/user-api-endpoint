@@ -5,7 +5,49 @@
  * @param  {Object} fields 
  */
 
-module.exports.make = fields => {
+module.exports = {
+    make,
+    match
+}
+
+
+/**
+ * Simple matcher used to validate passwords
+ * 
+ * password = {
+ *    first: 1234pass,
+ *    second: 1234pass
+ * }
+ * 
+ * @param {Object} passwords 
+ */
+
+function match(password) {
+    return new Promise(async(resolve, reject) => {
+
+        let password1 = password.first;
+        let password2 = password.second;
+        
+        if (password1 != password2) return reject({
+            message: "Password does not match.",
+            code: 400
+        });
+        
+        await this.make({ password: password1 }).catch(err => reject(err));
+        await this.make({ password: password2 }).catch(err => reject(err));
+
+        return resolve(null);
+    });
+}
+
+
+/**
+ * Geberal validator for object fields
+ * 
+ * @param {Object} fields 
+ */
+
+function make (fields) {
     return new Promise((resolve, reject) => {
 
         for (var key in fields) {
@@ -15,7 +57,7 @@ module.exports.make = fields => {
 
             if (!field) return reject({ message: `Missing ${key}.`, code: 400 });
     
-            if (key == 'password')
+            if (key == 'password' && typeof field !== 'object')
                 error = validatePassword(field);
             else if (key == 'email')
                 error = validateEmail(field);
@@ -90,6 +132,8 @@ function validateEmail(email) {
  */
 
 function validatePassword(password) {
+
+    console.log(password);
     if (password.length < 5)
         return 'Password too short.';
 
@@ -98,8 +142,11 @@ function validatePassword(password) {
 
     for (var i = 0; i < password.length; i++) {
         var char = password[i];
-        if (isInt(char)) containsInt = true;
-        else containsChar = true;
+        if (isInt(char))  {
+            containsInt = true;
+        } else {
+            containsChar = true;
+        } 
     }
 
     if (!containsInt || !containsChar)

@@ -33,18 +33,30 @@ describe('GET/ find', function() {
 
     let validId = profile._id;
     let invalidId = "this_is_an_invalid_id";
+    let unknownId = "12713a26-94c4-40d5-ad4e-014f8b22a060";
 
-    it('get user with valid _id', done => {
+    it('find user with VALID _id', done => {
         request(server).get(`/user/find?_id=${validId}`)
-            .expect(200)
-            .expect(profile, done());
+            .end((err, res) => {
+                expect(res.statusCode).to.equal(200);
+                expect(res.body.email).to.equal(profile.email);
+                done();
+            });
     });
 
-    it.skip('get user with invalid _id', done => {
-        chai.request(server).get(`/user/find?_id=${invalidId}`)
+    it('find user with INVALID _id', done => {
+        request(server).get(`/user/find?_id=${invalidId}`)
+            .end((err, res) => {
+                expect(res.statusCode).to.equal(400);
+                expect(res.body).to.equal({ error: "Invalid UUID." });
+                done();
+            });
+    });
+
+    it('find user with UNKNOWN _id', done => {
+        request(server).get(`/user/find?_id=${unknownId}`)
         .end((err, res) => {
-            res.should.have.status(400);
-            res.body.error.should.equal("Invalid Uuid");
+            expect(res.statusCode).to.equal(404);
             done();
         });
     });

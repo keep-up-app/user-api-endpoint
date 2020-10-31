@@ -37,15 +37,10 @@ function create(params) {
     return new Promise(async(resolve, reject) => {
         
         await validator.make(params).catch(err => reject(err));
+        validator.match(params.password).catch(err => reject(err));
         
         let email = params.email;
-        let password = params.password;
-
-        if (password != params.password_repeated)
-            return reject({ 
-                message: "Password does not match.", 
-                code: 400 
-            });
+        let password = params.password.first;
 
         let anyMatching = await User.findOne({ email: email })
             .catch(err => reject(err));
@@ -87,12 +82,6 @@ function create(params) {
 
 function find(params) {
     return new Promise(async(resolve, reject) => {
-
-        if (params.password) return reject({
-            message: "Operation not permitted",
-            details: "Cannot search User by password",
-            code: 403
-        });
         
         await validator.make(params).catch(err => reject(err));
 
@@ -135,11 +124,16 @@ function update(params) {
         await validator.make(params.find).catch(err => reject(err));
         await validator.make(params.with).catch(err => reject(err));
 
+        if (params.with.password) {
+            let passwords = params.with.password;
+            await validator.match(passwords).catch(err => reject(err));
+        }
+        
         var updatedUser = await this.find(params.find).catch(err => reject(err));
         
         updatedUser.steamid = parseInt(params.steamid) || updatedUser.steamid;
         updatedUser.username = params.with['username'] || updatedUser.username;
-        updatedUser.password = params.with['password'] || updatedUser.password;
+        updatedUser.password = params.with.password['first'] || updatedUser.password;
         updatedUser.email = params.with['email'] || updatedUser.email;
 
         await updatedUser.save().catch(err => reject({
@@ -167,6 +161,12 @@ function update(params) {
 
 function destroy(params) {
     return new Promise(async(resolve, reject) => {
+
+        if (params.password) return reject({
+            message: "Operation not permitted",
+            details: "Cannot search User by password",
+            code: 403
+        });
 
         let user = await this.find(params).catch(err => reject(err));
         
