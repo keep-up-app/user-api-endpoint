@@ -133,7 +133,6 @@ function validateEmail(email) {
 
 function validatePassword(password) {
 
-    console.log(password);
     if (password.length < 5)
         return 'Password too short.';
 
