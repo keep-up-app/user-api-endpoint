@@ -16,15 +16,11 @@ module.exports = router;
  * @method {POST}
  */
 
-router.post('/create', async(req, res) => {
+router.post('/create', (req, res) => {
 
-    let params = req.body;
-
-    let user = await UserController.create(params)
+    UserController.create(req.body)
+        .then(user => res.send(user))
         .catch(err => { return res.status(err.code).send({ error: err.message, details: err.details }) });
-
-    if (user) return res.json(user);
-    else return res.sendStatus(500);
 });
 
 
@@ -37,11 +33,9 @@ router.post('/create', async(req, res) => {
 
 router.get('/find', async(req, res) => {
     
-    let user = await UserController.find(req.query)
+    UserController.find(req.query)
+        .then(user => res.send(user))
         .catch(err => { return res.status(err.code).send({ error: err.message, details: err.details }) });
-
-    if (user) return res.send(user);
-    else return res.sendStatus(500);
 });
 
 
@@ -52,18 +46,17 @@ router.get('/find', async(req, res) => {
  * @method {PUT}
  */
 
-router.put('/update', async(req, res) => {
+router.put('/update', (req, res) => {
     
     let retrieve = req.query;
     let params = req.body;
 
-    let user = await UserController.update({
+    UserController.update({
         find: retrieve,
         with: params 
-    }).catch(err => { return res.status(err.code).send({ error: err.message, details: err.details }) });
-    
-    if (user) return res.json(user);
-    else return res.sendStatus(500);
+    })
+    .then(user => res.send(user))
+    .catch(err => { return res.status(err.code).send({ error: err.message, details: err.details }) });    
 });
 
 
@@ -74,10 +67,9 @@ router.put('/update', async(req, res) => {
  * @method {DELETE}
  */
 
-router.delete('/destroy', async(req, res) => {
+router.delete('/destroy', (req, res) => {
 
-    let message = await UserController.destroy(req.query)
-    .catch(err => { return res.status(err.code).send({ error: err.message, details: err.details }) });
-
-    if (message) return res.send({ success: message });
+    UserController.destroy(req.query)
+        .then(info => res.send({ message: info }))    
+        .catch(err => { return res.status(err.code).send({ error: err.message, details: err.details }) });
 });
