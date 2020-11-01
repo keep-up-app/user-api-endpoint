@@ -69,7 +69,7 @@ router.put('/update', (req, res) => {
 
 router.delete('/destroy', (req, res) => {
 
-    UserController.destroy(req.query)
+    UserController.destroy(req.body)
         .then(info => res.send({ message: info }))    
         .catch(err => { return res.status(err.code).send({ error: err.message, details: err.details }) });
 });
