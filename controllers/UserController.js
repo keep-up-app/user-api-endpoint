@@ -131,7 +131,7 @@ function update(params) {
         
         var updatedUser = await this.find(params.find).catch(err => reject(err));
         
-        updatedUser.steamid = parseInt(params.steamid) || updatedUser.steamid;
+        updatedUser.steamid = parseInt(params.with.steamid) || updatedUser.steamid;
         updatedUser.username = params.with['username'] || updatedUser.username;
         updatedUser.password = params.with.password['first'] || updatedUser.password;
         updatedUser.email = params.with['email'] || updatedUser.email;
