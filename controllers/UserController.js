@@ -172,12 +172,13 @@ function destroy(params) {
         
         await validator.make(params).catch(err => reject(err));
 
-        user.deleteOne()
-            .then(res => resolve("User profile deleted :'("))
-            .catch(err => reject({
-                message: "Error removing User porfile. Maybe she doesn't want you to go...",
-                details: err.message,
-                code: 500
-            }));
+        if (user)
+            user.deleteOne()
+                .then(res => resolve("User profile deleted :'("))
+                .catch(err => reject({
+                    message: "Error removing User porfile. Maybe she doesn't want you to go...",
+                    details: err.message,
+                    code: 500
+                }));
     });
 }
