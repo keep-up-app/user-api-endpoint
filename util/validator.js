@@ -93,7 +93,8 @@ function validateUuid(uuid) {
  */
 
 function validateSteamId(id) {
-    if (!id.match(/^[0-9]{17}$/))
+    let regex = /^[0-9]{17}$/;
+    if (!regex.test(id))
         return "Invalid Steam ID.";
     return null;
 }
