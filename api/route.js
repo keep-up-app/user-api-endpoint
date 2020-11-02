@@ -49,7 +49,7 @@ router.get('/find', async(req, res) => {
 router.put('/update', (req, res) => {
     
     UserController.update(req.body)
-        .then(user => { console.log(user); res.send(user)})
+        .then(user => res.send(user))
         .catch(err => { return res.status(err.code).send({ error: err.message, details: err.details }) });
 });
 
