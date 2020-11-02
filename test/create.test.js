@@ -2,11 +2,20 @@
  * Loading test dependencies
  */
 
-const request = require('supertest')
+const parser = require('body-parser');
+const request = require('supertest');
 const server = require('../server');
 const chai = require('chai');
 const chaiHttp = require('chai-http');
+const JsonUserProfile = require('./json/profile.json');
+
+
+/**
+ * Apply deps.
+ */
+
 chai.use(chaiHttp);
+server.use(parser.json());
 
 
 /**
@@ -18,58 +27,53 @@ var assert = chai.assert;
 var should = chai.should();
 
 
-/**
- * Standard JSON reponse for User model
- */
-
-const profile = require("./json/profile.json");
-
-
-/**
- * GET/ request tests to create user
- */
 
 describe('GET/ create', function() {
 
-    let validEmail = "example@email.com";
-    let invalidEmail = "invalid_email.com";
+    let validEmail = JsonUserProfile.email;
 
     let validPassword = "password1234";
-    let invalidPassword = "1234";
+    let invalidPassword = "123432523432";
 
     it('create user with VALID email, password', done => {
-        request(server).post("/user/create", {
+        request(server).post("/user/create")
+        .send({
             email: validEmail,
             password: {
                 first: validPassword,
                 second: validPassword
-        }})
-        .end((err, res) => {
-            expect(res.statusCode).to.equal(234);
-            expect(res.body.email).to.equal(profile.email);
+        }}).end((err, res) => {
+            expect(res.statusCode).to.equal(200);
+            expect(res.body.email).to.equal(JsonUserProfile.email);
             done();
         });
     });
 
-    it('create user with INVALID email', done => {
-        request(server).post("/user/create", {
-            email: invalidEmail,
+    it('create user with INVALID password', done => {
+        request(server).post("/user/create")
+        .send({
+            email: validEmail,
             password: {
-                first: validPassword,
-                second: validPassword
-        }})
-            .expect(400)
-            .expect(profile, done());
+                first: invalidPassword,
+                second: invalidPassword
+        }}).end((err, res) => {
+            expect(res.statusCode).to.equal(400);
+            expect(res.body.error).to.equal("Password must be alphanumerical.");
+            done();
+        });
     });
 
     it('create user with NOT MATCHING passwords', done => {
-        request(server).post("/user/create", {
+        request(server).post("/user/create")
+        .send({
             email: validEmail,
             password: {
                 first: validPassword,
                 second: invalidPassword
-        }})
-            .expect(454)
-            .expect(profile, done());
+        }}).end((err, res) => {
+            expect(res.statusCode).to.equal(400);
+            expect(res.body.error).to.equal("Password does not match.");
+            done();
+        });
     });
 });
