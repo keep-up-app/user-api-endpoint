@@ -48,15 +48,9 @@ router.get('/find', async(req, res) => {
 
 router.put('/update', (req, res) => {
     
-    let retrieve = req.query;
-    let params = req.body;
-
-    UserController.update({
-        find: retrieve,
-        with: params 
-    })
-    .then(user => res.send(user))
-    .catch(err => { return res.status(err.code).send({ error: err.message, details: err.details }) });    
+    UserController.update(req.body)
+        .then(user => { console.log(user); res.send(user)})
+        .catch(err => { return res.status(err.code).send({ error: err.message, details: err.details }) });
 });
 
 
