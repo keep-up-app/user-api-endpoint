@@ -15,7 +15,9 @@ server.use(parser.json());
 init([
     'server',
     'create',
-    'find'
+    'find',
+    'update',
+    'delete'
 ]);
 
 

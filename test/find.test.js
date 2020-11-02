@@ -31,10 +31,10 @@ var should = chai.should();
 describe('GET/ find', function() {
 
     let validEmail = JsonUserProfile.email;
-    let invalidEmail = "this_is_an_invalid_email";
+    let invalidEmail = null;
     let unknownEmail = "unknown@email.com";
 
-    it('find user with VALID _id', done => {
+    it('find user with VALID email', done => {
         request(server).get(`/user/find?email=${validEmail}`)
             .end((err, res) => {
                 expect(res.statusCode).to.equal(200);
@@ -43,16 +43,16 @@ describe('GET/ find', function() {
             });
     });
 
-    it('find user with INVALID _id', done => {
+    it('find user with INVALID email', done => {
         request(server).get(`/user/find?email=${invalidEmail}`)
             .end((err, res) => {
                 expect(res.statusCode).to.equal(400);
-                expect(res.body.error).to.equal("Invalid Email.");
+                expect(res.body.error).to.equal("Missing Email.");
                 done();
             });
     });
 
-    it('find user with UNKNOWN _id', done => {
+    it('find user with UNKNOWN email', done => {
         request(server).get(`/user/find?email=${unknownEmail}`)
             .end((err, res) => {
                 expect(res.statusCode).to.equal(404);
