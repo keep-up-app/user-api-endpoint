@@ -55,8 +55,9 @@ function make (fields) {
             var field = fields[key];
             var error = null;
 
-            if (!field) return reject({ message: `Missing ${key}.`, code: 400 });
-    
+            if (field == "" || field == null || field == "null") 
+                return reject({ message: `Missing ${key.charAt(0).toUpperCase() + key.slice(1)}.`, code: 400 });
+
             if (key == 'password' && typeof field !== 'object')
                 error = validatePassword(field);
             else if (key == 'email')
@@ -121,7 +122,7 @@ function validateMongooseId(id) {
 function validateEmail(email) {
     let regex = /\S+@\S+\.\S+/;
     if (!regex.test(email))
-        return 'Invalid Email.';
+        return 'Invalid email.';
     return null;
 }
 

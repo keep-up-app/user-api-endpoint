@@ -85,6 +85,12 @@ function find(params) {
         
         await validator.make(params).catch(err => reject(err));
 
+        if (await !User.exists(params))
+            return reject({
+                message: "User not found.",
+                code: 404
+            });
+
         var user = await User.find(params)
             .then(users => users[0])
             .catch(err => reject({
@@ -93,11 +99,11 @@ function find(params) {
                 code: 500,
             }));
         
-        if (!user) return reject({
+        if(!user) return reject({
             message: "User not found.",
             code: 404
         });
-        
+
         return resolve(user);
     });
 };
@@ -124,25 +130,30 @@ function update(params) {
         await validator.make(params.find).catch(err => reject(err));
         await validator.make(params.with).catch(err => reject(err));
 
+        var user = await this.find(params.find).catch(err => reject(err));
+        
+        if (!user) return reject({
+            message: "User not found.",
+            code: 404
+        });
+
         if (params.with.password) {
             let passwords = params.with.password;
             await validator.match(passwords).catch(err => reject(err));
+            user.password = params.with.password != undefined ? params.with.password.first : user.password;
         }
         
-        var updatedUser = await this.find(params.find).catch(err => reject(err));
-        
-        updatedUser.steamid = parseInt(params.with.steamid) || updatedUser.steamid;
-        updatedUser.username = params.with['username'] || updatedUser.username;
-        updatedUser.password = params.with.password['first'] || updatedUser.password;
-        updatedUser.email = params.with['email'] || updatedUser.email;
+        user.steamid = params.with.steamid != undefined ? parseInt(params.with.steamid) : user.steamid;
+        user.username = params.with.username != undefined ? params.with.username : user.username;
+        user.email = params.with.email != undefined ? params.with.email : user.email;
 
-        await updatedUser.save().catch(err => reject({
+        await user.save().catch(err => reject({
             message: "Error updating User",
             details: err.message,
             code: 500
         }));
 
-        return resolve(updatedUser);
+        return resolve(user);
     });
 };
 
@@ -163,7 +174,7 @@ function destroy(params) {
     return new Promise(async(resolve, reject) => {
 
         if (params.password) return reject({
-            message: "Operation not permitted",
+            message: "Operation not permitted.",
             details: "Cannot search User by password",
             code: 403
         });
@@ -174,7 +185,7 @@ function destroy(params) {
 
         if (user)
             user.deleteOne()
-                .then(res => resolve("User profile deleted :'("))
+                .then(res => resolve("User profile deleted :("))
                 .catch(err => reject({
                     message: "Error removing User porfile. Maybe she doesn't want you to go...",
                     details: err.message,
