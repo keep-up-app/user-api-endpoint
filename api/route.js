@@ -10,7 +10,7 @@ module.exports = router;
 
 
 /**
- * Creats new user with given params
+ * Creats new user with given paramaters
  * URI: user/create
  * 
  * @method {POST}
@@ -32,7 +32,7 @@ router.post('/create', (req, res) => {
  */
 
 router.get('/find', async(req, res) => {
-    
+
     UserController.find(req.query)
         .then(user => res.send(user))
         .catch(err => { return res.status(err.code).send({ error: err.message, details: err.details }) });
@@ -47,7 +47,7 @@ router.get('/find', async(req, res) => {
  */
 
 router.put('/update', (req, res) => {
-    
+
     UserController.update(req.body)
         .then(user => res.send(user))
         .catch(err => { return res.status(err.code).send({ error: err.message, details: err.details }) });
@@ -64,6 +64,6 @@ router.put('/update', (req, res) => {
 router.delete('/destroy', (req, res) => {
 
     UserController.destroy(req.body)
-        .then(info => res.send({ success: info }))    
+        .then(info => res.send({ success: info }))
         .catch(err => { return res.status(err.code).send({ error: err.message, details: err.details }) });
 });
