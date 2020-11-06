@@ -10,24 +10,31 @@ on:
     branches: [ master ]
 
 jobs:
-
+  
   test:
-
+    
     runs-on: ubuntu-latest
-
+    
+    strategy:
+      matrix:
+        node-version: [8.x, 10.x, 12.x]
+    
     steps:
       - name: Checkout Repo v2
         uses: actions/checkout@v2
-      
-      - name: Use Node.js 14.x
+        
+      - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v1
         with:
-          node-version: 14.x
-          
-      - name: Running CI Installation
-        run: npm ci
+          node-version: ${{ matrix.node-version }}
+      - run: npm install
+      - run: npm run build --if-present
+        
       - name: Running Application/Server Unit Tests
         run: npm test
+        env:
+          CI: true
+      
   
   deploy:
     
