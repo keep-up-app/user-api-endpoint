@@ -32,7 +32,7 @@ describe('GET/ create', function() {
 
     let validEmail = JsonUserProfile.email;
 
-    let validPassword = "password1234";
+    let validPassword = JsonUserProfile.password;
     let invalidPassword = "123432523432";
 
     it('create user with VALID email, password', done => {

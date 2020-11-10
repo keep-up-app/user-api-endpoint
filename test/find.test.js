@@ -31,30 +31,50 @@ var should = chai.should();
 describe('GET/ find', function() {
 
     let validEmail = JsonUserProfile.email;
-    let invalidEmail = null;
     let unknownEmail = "unknown@email.com";
 
-    it('find user with VALID email', done => {
-        request(server).get(`/user/find?email=${validEmail}`)
-            .end((err, res) => {
+    let validPassword = JsonUserProfile.password;
+    let invalidPassword = '123';
+
+    it('find user with VALID email, password', done => {
+        request(server).post('/user/find')
+            .send({
+                email: validEmail,
+                password: {
+                    first: validPassword,
+                    second: validPassword
+                }
+            }).end((err, res) => {
                 expect(res.statusCode).to.equal(200);
                 expect(res.body.email).to.equal(JsonUserProfile.email);
                 done();
             });
     });
 
-    it('find user with INVALID email', done => {
-        request(server).get(`/user/find?email=${invalidEmail}`)
-            .end((err, res) => {
+    it('find user with INVALID password', done => {
+        request(server).post('/user/find')
+            .send({
+                email: validEmail,
+                password: {
+                    first: invalidPassword,
+                    second: invalidPassword
+                }
+            }).end((err, res) => {
                 expect(res.statusCode).to.equal(400);
-                expect(res.body.error).to.equal("Missing Email.");
+                expect(res.body.error).to.equal("Password too short.");
                 done();
             });
     });
 
     it('find user with UNKNOWN email', done => {
-        request(server).get(`/user/find?email=${unknownEmail}`)
-            .end((err, res) => {
+        request(server).post('/user/find')
+            .send({
+                email: unknownEmail,
+                password: {
+                    first: validPassword,
+                    second: validPassword
+                }
+            }).end((err, res) => {
                 expect(res.statusCode).to.equal(404);
                 done();
             });

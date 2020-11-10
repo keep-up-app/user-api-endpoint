@@ -28,14 +28,14 @@ router.post('/create', (req, res) => {
  * Gets user with given params
  * URI: user/find
  * 
- * @method {GET}
+ * @method {POST}
  */
 
-router.get('/find', async(req, res) => {
+router.post('/find', async(req, res) => {
     
-    if (Object.keys(req.query).length == 0) return res.sendStatus(403);
+    if (Object.keys(req.body).length == 0) return res.sendStatus(403);
 
-    UserController.find(req.query)
+    UserController.find(req.body)
         .then(user => res.send(user))
         .catch(err => { return res.status(err.code).send({ error: err.message, details: err.details }) });
 });
