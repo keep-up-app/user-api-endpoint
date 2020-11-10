@@ -26,7 +26,7 @@ jobs:
           
       - name: Running CI Installation
         run: npm ci
-      - name: Running Application/Server Unit Tests
+      - name: Running Application Unit Tests
         run: npm test
   
   deploy:
@@ -47,4 +47,3 @@ jobs:
         run: |
           git remote add heroku https://heroku:$TOKEN@git.heroku.com/$APP.git
           git push heroku HEAD:master -f
-    
