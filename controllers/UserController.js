@@ -84,10 +84,6 @@ function find(params) {
     return new Promise(async(resolve, reject) => {
         
         await validator.make(params).catch(err => reject(err));
-        if (params.password) {
-            validator.match(params.password).catch(err => reject(err));
-            params.password = params.password.first;
-        }
 
         if (await !User.exists(params))
             return reject({

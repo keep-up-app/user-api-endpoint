@@ -40,10 +40,7 @@ describe('GET/ find', function() {
         request(server).post('/user/find')
             .send({
                 email: validEmail,
-                password: {
-                    first: validPassword,
-                    second: validPassword
-                }
+                password: validPassword
             }).end((err, res) => {
                 expect(res.statusCode).to.equal(200);
                 expect(res.body.email).to.equal(JsonUserProfile.email);
@@ -55,10 +52,7 @@ describe('GET/ find', function() {
         request(server).post('/user/find')
             .send({
                 email: validEmail,
-                password: {
-                    first: invalidPassword,
-                    second: invalidPassword
-                }
+                password: invalidPassword
             }).end((err, res) => {
                 expect(res.statusCode).to.equal(400);
                 expect(res.body.error).to.equal("Password too short.");
@@ -70,10 +64,7 @@ describe('GET/ find', function() {
         request(server).post('/user/find')
             .send({
                 email: unknownEmail,
-                password: {
-                    first: validPassword,
-                    second: validPassword
-                }
+                password: validPassword
             }).end((err, res) => {
                 expect(res.statusCode).to.equal(404);
                 done();
