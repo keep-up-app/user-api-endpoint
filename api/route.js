@@ -33,6 +33,8 @@ router.post('/create', (req, res) => {
 
 router.get('/find', async(req, res) => {
     
+    if (Object.keys(req.query).length == 0) return res.sendStatus(403);
+    
     UserController.find(req.query)
         .then(user => res.send(user))
         .catch(err => { return res.status(err.code).send({ error: err.message, details: err.details }) });
