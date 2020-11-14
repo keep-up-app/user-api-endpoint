@@ -49,21 +49,22 @@ function create(params) {
             message: "User already exists.",
             code: 400 
         });
-
-        let user = new User({
-            _id: generator.generateUUID,
-            username: generator.generateUsername,
-            email: email,
-            password: password,
-        });
-
-        await user.save().catch(err => reject({ 
-            message: "An error occured while registering User",
-            details: err.message, 
-            code: 500
-        }));
-        
-        return resolve(user);
+        else {
+            let user = new User({
+                _id: generator.generateUUID,
+                username: generator.generateUsername,
+                email: email,
+                password: password,
+            });
+    
+            await user.save().catch(err => reject({ 
+                message: "An error occured while registering user.",
+                details: err.message, 
+                code: 500
+            }));
+            
+            return resolve(user);
+        }
     });
 }
 
@@ -94,7 +95,7 @@ function find(params) {
         var user = await User.find(params)
             .then(users => users[0])
             .catch(err => reject({
-                message: "Error finding User",
+                message: "Error finding user.",
                 details: err.message,
                 code: 500,
             }));
@@ -136,24 +137,25 @@ function update(params) {
             message: "User not found.",
             code: 404
         });
-
-        if (params.with.password) {
-            let passwords = params.with.password;
-            await validator.match(passwords).catch(err => reject(err));
-            user.password = params.with.password != undefined ? params.with.password.first : user.password;
+        else {
+            if (params.with.password) {
+                let passwords = params.with.password;
+                await validator.match(passwords).catch(err => reject(err));
+                user.password = params.with.password != undefined ? params.with.password.first : user.password;
+            }
+            
+            user.steamid = params.with.steamid != undefined ? parseInt(params.with.steamid) : user.steamid;
+            user.username = params.with.username != undefined ? params.with.username : user.username;
+            user.email = params.with.email != undefined ? params.with.email : user.email;
+    
+            await user.save().catch(err => reject({
+                message: "Error updating User",
+                details: err.message,
+                code: 500
+            }));
+    
+            return resolve(user);
         }
-        
-        user.steamid = params.with.steamid != undefined ? parseInt(params.with.steamid) : user.steamid;
-        user.username = params.with.username != undefined ? params.with.username : user.username;
-        user.email = params.with.email != undefined ? params.with.email : user.email;
-
-        await user.save().catch(err => reject({
-            message: "Error updating User",
-            details: err.message,
-            code: 500
-        }));
-
-        return resolve(user);
     });
 };
 
