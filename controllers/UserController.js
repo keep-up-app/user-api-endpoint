@@ -61,6 +61,7 @@ function create(params) {
                 username: generator.generateUsername,
                 email: email,
                 password: password,
+                token: generator.generateToken(30)
             });
     
             await user.save().catch(err => reject({ 
