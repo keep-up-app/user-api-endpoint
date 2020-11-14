@@ -40,6 +40,7 @@ function create(params) {
         const invPwd = validator.match(params.password).catch(err => reject(err));
         
         if (!invInp || !invPwd) {
+            console.log('rejection officially dont work.')
             let email = params.email;
             let password = params.password.first;
     
@@ -87,30 +88,30 @@ function create(params) {
 function find(params) {
     return new Promise(async(resolve, reject) => {
         
-        await validator.make(params).catch(err => reject(err));
+        const invInp = await validator.make(params).catch(err => reject(err));
 
-        if (await !User.exists(params)) {
-            return reject({
-                message: "User not found.",
-                code: 404 });
-
-        } else {
-
-            console.log('rejection officially dont work.')
-            var user = await User.find(params)
-            .then(users => users[0])
-            .catch(err => reject({
-                message: "Error finding user.",
-                details: err.message,
-                code: 500,
-            }));
-        
-            if(!user) return reject({
-                message: "User not found.",
-                code: 404
-            });
-
-            return resolve(user);
+        if (!invInp) {
+            if (await !User.exists(params)) {
+                return reject({
+                    message: "User not found.",
+                    code: 404 });
+    
+            } else {
+                var user = await User.find(params)
+                .then(users => users[0])
+                .catch(err => reject({
+                    message: "Error finding user.",
+                    details: err.message,
+                    code: 500,
+                }));
+            
+                if(!user) return reject({
+                    message: "User not found.",
+                    code: 404
+                });
+    
+                return resolve(user);
+            }
         }
     });
 };
