@@ -37,7 +37,7 @@ function create(params) {
     return new Promise(async(resolve, reject) => {
         
         const invInp = await validator.make(params).catch(err => { return reject(err) });
-        const invPwd = validator.match(params.password).catch(err => { return reject(err) });
+        const invPwd = await validator.match(params.password).catch(err => { return reject(err) });
         console.log(invInp + " " + params);
         console.log(invPwd + " " + params.password);
         
