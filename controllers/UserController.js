@@ -95,6 +95,8 @@ function find(params) {
                 code: 404 });
 
         } else {
+
+            console.log('rejection officially dont work.')
             var user = await User.find(params)
             .then(users => users[0])
             .catch(err => reject({
