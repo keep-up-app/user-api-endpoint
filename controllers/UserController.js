@@ -34,42 +34,38 @@ module.exports = {
  */
 
 function create(params) {
-    return new Promise(async(resolve, reject) => {
+    return new Promise((resolve, reject) => {
+        validator.make(params).then(inv1 => {
+            validator.match(params.password).then(inv2 => {
+                let email = params.email;
+                let password = params.password.first;
         
-        const invInp = await validator.make(params).catch(err => { return reject(err) });
-        const invPwd = await validator.match(params.password).catch(err => { return reject(err) });
-        console.log(invInp + " " + params);
-        console.log(invPwd + " " + params.password);
+                User.findOne({ email: email })
+                .then(res => {
+                    
+                    if (res) {
+                        return reject({ 
+                            message: "User already exists.",
+                            code: 400 });
         
-        if (!invInp || !invPwd) {
-            let email = params.email;
-            let password = params.password.first;
-    
-            let anyMatching = await User.findOne({ email: email })
-                .catch(err => reject(err));
-    
-            if (anyMatching) {
-                return reject({ 
-                    message: "User already exists.",
-                    code: 400 });
-
-            } else {
-                let user = new User({
-                    _id: generator.generateUUID,
-                    username: generator.generateUsername,
-                    email: email,
-                    password: password,
-                });
-        
-                await user.save().catch(err => reject({ 
-                    message: "An error occured while registering user.",
-                    details: err.message, 
-                    code: 500
-                }));
+                    } else {
+                        let user = new User({
+                            _id: generator.generateUUID,
+                            username: generator.generateUsername,
+                            email: email,
+                            password: password,
+                        });
                 
-                return resolve(user);
-            }
-        }
+                        user.save().then(user => resolve(user)
+                        ).catch(err => reject({ 
+                            message: "An error occured while registering user.",
+                            details: err.message, 
+                            code: 500
+                        }));
+                    }
+                }).catch(err => reject(err));
+            }).catch(err => reject(err));
+        }).catch(err => reject(err));
     });
 }
 

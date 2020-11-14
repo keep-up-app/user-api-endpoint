@@ -36,7 +36,7 @@ function match(password) {
         await this.make({ password: password1 }).catch(err => reject(err));
         await this.make({ password: password2 }).catch(err => reject(err));
 
-        return resolve(false);
+        return resolve();
     });
 }
 
@@ -70,7 +70,7 @@ function make (fields) {
             if (error) return reject({ message: error, code: 400 });
         }
     
-        return resolve(false);
+        return false;
     });
 }
 
