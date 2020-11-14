@@ -42,13 +42,13 @@ function create(params) {
         let email = params.email;
         let password = params.password.first;
         
-        let match = User.findOne({ email: email })
+        let match = await User.findOne({ email: email })
             .catch(err => reject({
                 message: "An error occured.",
                 details: err.message,
                 code: 500
             }));
-
+                
         if (match) {
             return reject({ 
                 message: "User already exists.",
