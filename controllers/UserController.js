@@ -36,11 +36,12 @@ module.exports = {
 function create(params) {
     return new Promise(async(resolve, reject) => {
         
-        const invInp = await validator.make(params).catch(err => reject(err));
-        const invPwd = validator.match(params.password).catch(err => reject(err));
+        const invInp = await validator.make(params).catch(err => { return reject(err) });
+        const invPwd = validator.match(params.password).catch(err => { return reject(err) });
+        console.log(invInp + " " + params);
+        console.log(invPwd + " " + params.password);
         
         if (!invInp || !invPwd) {
-            console.log('rejection officially dont work.')
             let email = params.email;
             let password = params.password.first;
     
