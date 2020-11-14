@@ -34,7 +34,7 @@ module.exports = {
  */
 
 function create(params) {
-    return new Promise((resolve, reject) => {
+    return new Promise(async(resolve, reject) => {
 
         await validator.make(params).catch(err => reject(err));
         await validator.match(params.password).catch(err => reject(err));
