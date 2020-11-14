@@ -35,37 +35,42 @@ module.exports = {
 
 function create(params) {
     return new Promise((resolve, reject) => {
-        validator.make(params).then(inv1 => {
-            validator.match(params.password).then(inv2 => {
-                let email = params.email;
-                let password = params.password.first;
+
+        await validator.make(params).catch(err => reject(err));
+        await validator.match(params.password).catch(err => reject(err));
+
+        let email = params.email;
+        let password = params.password.first;
         
-                User.findOne({ email: email })
-                .then(res => {
-                    
-                    if (res) {
-                        return reject({ 
-                            message: "User already exists.",
-                            code: 400 });
-        
-                    } else {
-                        let user = new User({
-                            _id: generator.generateUUID,
-                            username: generator.generateUsername,
-                            email: email,
-                            password: password,
-                        });
-                
-                        user.save().then(user => resolve(user)
-                        ).catch(err => reject({ 
-                            message: "An error occured while registering user.",
-                            details: err.message, 
-                            code: 500
-                        }));
-                    }
-                }).catch(err => reject(err));
-            }).catch(err => reject(err));
-        }).catch(err => reject(err));
+        let match = User.findOne({ email: email })
+            .catch(err => reject({
+                message: "An error occured.",
+                details: err.message,
+                code: 500
+            }));
+
+        if (match) {
+            return reject({ 
+                message: "User already exists.",
+                code: 400
+            });
+
+        } else {
+            let user = new User({
+                _id: generator.generateUUID,
+                username: generator.generateUsername,
+                email: email,
+                password: password,
+            });
+    
+            await user.save().catch(err => reject({ 
+                message: "An error occured while registering user.",
+                details: err.message, 
+                code: 500
+            }));
+
+            return resolve(user);
+        }
     });
 }
 
@@ -85,30 +90,28 @@ function create(params) {
 function find(params) {
     return new Promise(async(resolve, reject) => {
         
-        const invInp = await validator.make(params).catch(err => reject(err));
+        await validator.make(params).catch(err => reject(err));
 
-        if (!invInp) {
-            if (await !User.exists(params)) {
-                return reject({
-                    message: "User not found.",
-                    code: 404 });
-    
-            } else {
-                var user = await User.find(params)
-                .then(users => users[0])
-                .catch(err => reject({
-                    message: "Error finding user.",
-                    details: err.message,
-                    code: 500,
-                }));
-            
-                if(!user) return reject({
-                    message: "User not found.",
-                    code: 404
-                });
-    
-                return resolve(user);
-            }
+        if (await !User.exists(params)) {
+            return reject({
+                message: "User not found.",
+                code: 404 });
+
+        } else {
+            var user = await User.find(params)
+            .then(users => users[0])
+            .catch(err => reject({
+                message: "Error finding user.",
+                details: err.message,
+                code: 500,
+            }));
+        
+            if(!user) return reject({
+                message: "User not found.",
+                code: 404
+            });
+
+            return resolve(user);
         }
     });
 };
