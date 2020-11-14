@@ -36,34 +36,37 @@ module.exports = {
 function create(params) {
     return new Promise(async(resolve, reject) => {
         
-        await validator.make(params).catch(err => reject(err));
-        validator.match(params.password).catch(err => reject(err));
+        const invInp = await validator.make(params).catch(err => reject(err));
+        const invPwd = validator.match(params.password).catch(err => reject(err));
         
-        let email = params.email;
-        let password = params.password.first;
-
-        let anyMatching = await User.findOne({ email: email })
-            .catch(err => reject(err));
-
-        if (anyMatching) return reject({ 
-            message: "User already exists.",
-            code: 400 
-        });
-        else {
-            let user = new User({
-                _id: generator.generateUUID,
-                username: generator.generateUsername,
-                email: email,
-                password: password,
-            });
+        if (!invInp || !invPwd) {
+            let email = params.email;
+            let password = params.password.first;
     
-            await user.save().catch(err => reject({ 
-                message: "An error occured while registering user.",
-                details: err.message, 
-                code: 500
-            }));
-            
-            return resolve(user);
+            let anyMatching = await User.findOne({ email: email })
+                .catch(err => reject(err));
+    
+            if (anyMatching) {
+                return reject({ 
+                    message: "User already exists.",
+                    code: 400 });
+
+            } else {
+                let user = new User({
+                    _id: generator.generateUUID,
+                    username: generator.generateUsername,
+                    email: email,
+                    password: password,
+                });
+        
+                await user.save().catch(err => reject({ 
+                    message: "An error occured while registering user.",
+                    details: err.message, 
+                    code: 500
+                }));
+                
+                return resolve(user);
+            }
         }
     });
 }
@@ -86,13 +89,13 @@ function find(params) {
         
         await validator.make(params).catch(err => reject(err));
 
-        if (await !User.exists(params))
+        if (await !User.exists(params)) {
             return reject({
                 message: "User not found.",
-                code: 404
-            });
+                code: 404 });
 
-        var user = await User.find(params)
+        } else {
+            var user = await User.find(params)
             .then(users => users[0])
             .catch(err => reject({
                 message: "Error finding user.",
@@ -100,12 +103,13 @@ function find(params) {
                 code: 500,
             }));
         
-        if(!user) return reject({
-            message: "User not found.",
-            code: 404
-        });
+            if(!user) return reject({
+                message: "User not found.",
+                code: 404
+            });
 
-        return resolve(user);
+            return resolve(user);
+        }
     });
 };
 
@@ -133,11 +137,12 @@ function update(params) {
 
         var user = await this.find(params.find).catch(err => reject(err));
         
-        if (!user) return reject({
-            message: "User not found.",
-            code: 404
-        });
-        else {
+        if (!user) {
+            return reject({
+                message: "User not found.",
+                code: 404 });
+
+        } else {
             if (params.with.password) {
                 let passwords = params.with.password;
                 await validator.match(passwords).catch(err => reject(err));
