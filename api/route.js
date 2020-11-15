@@ -109,13 +109,12 @@ const checkTokenAuth = async (req) => {
 
 
 const axios = require('axios');
-router.post('/authTest', async(req, res) => {
+router.get('/authTest', async(req, res) => {
     
-    let user = req.body;
     let profile = await axios.get('http:localhost:4545/steam/user/auth');
 
     return res.send({
-        user: user,
+        user: 'user profile placeholder',
         profile: profile
     });
 });
