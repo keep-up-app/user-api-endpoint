@@ -48,11 +48,15 @@ router.post('/find', async(req, res) => {
  * @method {PUT}
  */
 
-router.put('/update', (req, res) => {
+router.put('/update', async(req, res) => {
 
-    UserController.update(req.body)
-        .then(user => res.send(user))
-        .catch(err => { return res.status(err.code).send({ error: err.message, details: err.details }) });
+    if (await checkTokenAuth(req)) {
+        UserController.update(req.body)
+            .then(user => res.send(user))
+            .catch(err => { return res.status(err.code).send({ error: err.message, details: err.details }) });
+    } else {
+        return res.sendStatus(403);
+    }
 });
 
 
@@ -63,9 +67,41 @@ router.put('/update', (req, res) => {
  * @method {DELETE}
  */
 
-router.delete('/destroy', (req, res) => {
+router.delete('/destroy', async(req, res) => {
 
-    UserController.destroy(req.body)
-        .then(info => res.send({ success: info }))
-        .catch(err => { return res.status(err.code).send({ error: err.message, details: err.details }) });
+    if (await checkTokenAuth(req)) {
+        UserController.destroy(req.body)
+            .then(info => res.send({ success: info }))
+            .catch(err => { return res.status(err.code).send({ error: err.message, details: err.details }) });
+    } else {
+        return res.sendStatus(403);
+    }
 });
+
+
+/**
+ * Global endpoint for checking user token.
+ * Sends empty response if valide, sends 403 if invalid.
+ * URI: user/checkToken
+ * 
+ * @method {GET}
+ */
+
+router.get('/checkToken', async(req, res) => {
+    return res.sendStatus(await checkTokenAuth(req));
+});
+
+
+/**
+ * Helper function for checking token auth
+ * 
+ * @param {Request} req 
+ * @param {Response} res 
+ */
+
+const checkTokenAuth = async (req) => {
+    let token = req.get('Authorization');
+    let user = await UserController.find({ token: token })
+        .catch(err => { return console.log(err) });
+    return user ? 204 : 403; 
+}
