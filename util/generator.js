@@ -11,7 +11,7 @@ const { v4: uuidv4 } = require('uuid');
  */
 
 const config = {
-    dictionaries: [ung.adjectives, ung.colors, ung.animals],
+    dictionaries: [ung.adjectives, ung.animals],
     separator: '-',
     style: 'upperCase'
 };
