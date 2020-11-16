@@ -19,7 +19,7 @@ module.exports = router;
 router.post('/create', (req, res) => {
 
     UserController.create(req.body)
-        .then(user => res.send(user))
+        .then(user => res.status(201).send(user))
         .catch(err => { return res.status(err.code).send({ error: err.message, details: err.details }) });
 });
 
