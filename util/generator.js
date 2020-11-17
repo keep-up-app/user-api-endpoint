@@ -10,18 +10,11 @@ const uuid = require('uuid-random');
  * Custom name config
  */
 
-const config = {
+module.exports.UngConfig = {
     dictionaries: [ung.adjectives, ung.animals],
     separator: '-',
     style: 'upperCase'
 };
-
-
-/**
- * Use as username generator
- */
-
-module.exports.generateUsername = ung.uniqueNamesGenerator(config);
 
 
 /**
