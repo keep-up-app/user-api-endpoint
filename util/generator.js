@@ -3,7 +3,7 @@
  */
 
 const ung = require('unique-names-generator');
-const { v4: uuidv4 } = require('uuid');
+const uuid = require('uuid-random');
 
 
 /**
@@ -28,7 +28,7 @@ module.exports.generateUsername = ung.uniqueNamesGenerator(config);
  * Geberates UUID key
  */
 
-module.exports.generateUUID = uuidv4();
+module.exports.generateUUID = uuid();
 
 
 /**

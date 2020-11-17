@@ -12,6 +12,7 @@ require('../models/User');
 const validator = require('../util/validator');
 const generator = require('../util/generator');
 const mongoose = require("mongoose");
+const uuid = require('uuid-random');
 const User = mongoose.model("User");
 
 module.exports = {
@@ -57,8 +58,8 @@ function create(params) {
 
         } else {
             let user = new User({
-                _id: () => generator.generateUUID,
-                username: () => generator.generateUsername,
+                _id: uuid(),
+                username: generator.generateUsername,
                 email: email,
                 password: password,
                 token: generator.generateToken(30)
