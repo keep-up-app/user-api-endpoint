@@ -35,44 +35,50 @@ module.exports = {
  */
 
 function create(params) {
-    return new Promise(async(resolve, reject) => {
+    return new Promise((resolve, reject) => {
 
-        await validator.make(params).catch(err => reject(err));
-        await validator.match(params.password).catch(err => reject(err));
+        validator.make(params).then(async() => {
+            let invPwd = validator.match(params.password);
 
-        let email = params.email;
-        let password = params.password.first;
-        
-        let match = await User.findOne({ email: email })
-            .catch(err => reject({
-                message: "An error occured.",
-                details: err.message,
-                code: 500
-            }));
-                
-        if (match) {
-            return reject({ 
-                message: "User already exists.",
-                code: 400
-            });
-
-        } else {
-            let user = new User({
-                _id: uuid(),
-                username: generator.generateUsername,
-                email: email,
-                password: password,
-                token: generator.generateToken(30)
-            });
+            if (invPwd == null) {
     
-            await user.save().catch(err => reject({ 
-                message: "An error occured while registering user.",
-                details: err.message, 
-                code: 500
-            }));
-
-            return resolve(user);
-        }
+                let email = params.email;
+                let password = params.password.first;
+                
+                let match = await User.findOne({ email: email })
+                    .catch(err => reject({
+                        message: "An error occured.",
+                        details: err.message,
+                        code: 500
+                    }));
+                        
+                if (match) {
+                    return reject({ 
+                        message: "User already exists.",
+                        code: 400
+                    });
+        
+                } else {
+                    let user = new User({
+                        _id: uuid(),
+                        username: generator.generateUsername,
+                        email: email,
+                        password: password,
+                        token: generator.generateToken(30)
+                    });
+            
+                    await user.save().catch(err => reject({ 
+                        message: "An error occured while registering user.",
+                        details: err.message, 
+                        code: 500
+                    }));
+        
+                    return resolve(user);
+                }
+            } else {
+                return reject(invPwd);
+            }
+        }).catch(err => reject(err));
     });
 }
 
@@ -149,9 +155,9 @@ function update(params) {
 
         } else {
             if (params.with.password) {
-                let passwords = params.with.password;
-                await validator.match(passwords).catch(err => reject(err));
-                user.password = params.with.password != undefined ? params.with.password.first : user.password;
+                let invPwd = validator.match(params.with.password)
+                if (invPwd == null) user.password = params.with.password != undefined ? params.with.password.first : user.password;
+                else return reject(invPwd);
             }
             
             user.steamid = params.with.steamid != undefined ? parseInt(params.with.steamid) : user.steamid;

@@ -22,22 +22,25 @@ module.exports = {
  * @param {Object} passwords 
  */
 
-function match(password) {
-    return new Promise(async(resolve, reject) => {
+function match(passwords) {
 
-        let password1 = password.first;
-        let password2 = password.second;
-        
-        if (password1 != password2) return reject({
-            message: "Password does not match.",
-            code: 400
-        });
-        
-        await this.make({ password: password1 }).catch(err => reject(err));
-        await this.make({ password: password2 }).catch(err => reject(err));
-
-        return resolve(null);
+    let pwd1 = passwords.first;
+    let pwd2 = passwords.second;
+    
+    if (pwd1 != pwd2) return ({
+        message: "Password does not match.",
+        code: 400
     });
+
+    let invPwd1 = validatePassword(pwd1);
+    let invPwd2 = validatePassword(pwd2);
+
+    if (invPwd1 || invPwd2) return {
+        message: invPwd1 || invPwd2,
+        code: 400
+    };
+    
+    return null;
 }
 
 

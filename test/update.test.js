@@ -72,7 +72,7 @@ describe('GET/ update', function() {
             }
         }).end((err, res) => {
             expect(res.statusCode).to.equal(400);
-            expect(res.body.error).to.equal("Invalid Steam ID.");
+            expect(res.body.error).to.equal("Invalid SteamID.");
             done();
         });
     });

@@ -43,7 +43,7 @@ describe('GET/ create', function() {
                 first: validPassword,
                 second: validPassword
         }}).end((err, res) => {
-            expect(res.statusCode).to.equal(200);
+            expect(res.statusCode).to.equal(201);
             expect(res.body.email).to.equal(JsonUserProfile.email);
             done();
         });
