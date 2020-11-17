@@ -57,8 +57,8 @@ function create(params) {
 
         } else {
             let user = new User({
-                _id: generator.generateUUID,
-                username: generator.generateUsername,
+                _id: () => generator.generateUUID,
+                username: () => generator.generateUsername,
                 email: email,
                 password: password,
                 token: generator.generateToken(30)
