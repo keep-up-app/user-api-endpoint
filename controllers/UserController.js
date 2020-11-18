@@ -66,7 +66,7 @@ function create(params) {
                         email: email,
                         password: password,
                         token: generator.generateToken(30),
-                        created_at: new Date(data.timecreated * 1000).toDateString()
+                        created_at: new Date().toDateString()
                     });
             
                     await user.save().catch(err => reject({ 

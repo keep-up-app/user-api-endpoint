@@ -90,3 +90,41 @@ function constructQuery(params) {
     }
     return '?';
 }
+
+
+/**
+ * Get Time since from unix timstamp
+ * 
+ * @param {Int} time
+ * @returns {String} time
+ */
+
+module.exports.getTimeSince = (date) => {
+    var seconds = Math.floor((new Date() - date) / 1000);
+    var interval = seconds / 31536000;
+
+    var time = 0;
+    var period = 'Year';
+
+    if (interval > 1) {
+        time = Math.floor(interval);
+    } else if (interval > 1) {
+        interval = seconds / 2592000;
+        time = Math.floor(interval);
+        period = 'Month';
+    } else if (interval > 1) {
+        interval = seconds / 86400;
+        time = Math.floor(interval);
+        period = 'Day';
+    } else if (interval > 1) {
+        interval = seconds / 3600;
+        time = Math.floor(interval);
+        period = 'Hour';
+    } else if (interval > 1) {
+        interval = seconds / 60;
+        time = Math.floor(interval);
+        period = 'Minute';
+    } else time = Math.floor(seconds);
+
+    return `${time} ${time > 1 ? period + 's' : period}`;
+}
