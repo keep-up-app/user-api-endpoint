@@ -12,7 +12,6 @@ require('../models/User');
 const validator = require('../util/validator');
 const generator = require('../util/generator');
 const mongoose = require("mongoose");
-const format = require("../util/format");
 const uuid = require('uuid-random');
 const ung = require('unique-names-generator');
 const User = mongoose.model("User");
@@ -67,7 +66,7 @@ function create(params) {
                         email: email,
                         password: password,
                         token: generator.generateToken(30),
-                        created_at: format.readableTime(Date.now())
+                        created_at: new Date(data.timecreated * 1000).toDateString()
                     });
             
                     await user.save().catch(err => reject({ 

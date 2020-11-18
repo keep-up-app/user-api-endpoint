@@ -90,29 +90,3 @@ function constructQuery(params) {
     }
     return '?';
 }
-
-
-/**
- * Convertes playtime in seconds to understandable time
- * 
- * @param {Int} time
- * @returns {String} time
- */
-
-function readableTime(time = 0) {
-    let periods = ['Second', 'Minute', 'Hour', 'Day', 'Week', 'Month', 'Year', 'Decade'];
-    let durations = ['60', '60', '24', '7', '4.35', '12', '10'];
-    let diff = time;
-
-    var i = 0;
-    for (i = 0; diff >= durations[i] && i < durations.length - 1; i++)
-        diff /= durations[i];
-
-    diff = Math.round(diff);
-    if (diff > 1) periods[i] += 's';
-
-    if (diff == 0) return 'Never Played';
-    else return `${diff} ${periods[i]}`;
-}
-
-module.exports.readableTime = readableTime;
