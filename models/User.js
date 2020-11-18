@@ -33,7 +33,7 @@ const userSchema = new Schema({
         default: null
     },
     created_at: {
-        type: Date,
+        type: String,
         default: Date.now
     },
     token: {
