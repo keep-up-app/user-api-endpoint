@@ -50,7 +50,7 @@ router.post('/find', async(req, res) => {
 
 router.put('/update', async(req, res) => {
 
-    if (await checkTokenAuth(req)) {
+    if (await checkTokenAuth(req) == 204) {
         UserController.update(req.body)
             .then(user => res.send(user))
             .catch(err => { return res.status(err.code).send({ error: err.message, details: err.details }) });
@@ -69,7 +69,7 @@ router.put('/update', async(req, res) => {
 
 router.delete('/destroy', async(req, res) => {
 
-    if (await checkTokenAuth(req)) {
+    if (await checkTokenAuth(req) == 204) {
         UserController.destroy(req.body)
             .then(info => res.send({ success: info }))
             .catch(err => { return res.status(err.code).send({ error: err.message, details: err.details }) });
@@ -96,7 +96,6 @@ router.get('/checkToken', async(req, res) => {
  * Helper function for checking token auth
  * 
  * @param {Request} req 
- * @param {Response} res 
  */
 
 const checkTokenAuth = async (req) => {

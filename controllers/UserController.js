@@ -144,8 +144,6 @@ function find(params) {
 function update(params) {
     return new Promise(async(resolve, reject) => {
 
-        console.log(params);
-        
         await validator.make(params.find).catch(err => reject(err));
         await validator.make(params.with).catch(err => reject(err));
 

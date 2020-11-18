@@ -28,7 +28,7 @@ const userSchema = new Schema({
         require: true
     },
     steamid: {
-        type: Number,
+        type: BigInt,
         require: true,
         default: null
     },
