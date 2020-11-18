@@ -169,9 +169,7 @@ function update(params) {
                 else return reject(invPwd);
             }
             
-            user.steamid = params.with.steamid != undefined ? parseInt(params.with.steamid) : user.steamid;
-            user.steamid = user.steamid.divide(Long.fromString('2'));
-            
+            user.steamid = params.with.steamid != undefined ? params.with.steamid : user.steamid;
             user.username = params.with.username != undefined ? params.with.username : user.username;
             user.email = params.with.email != undefined ? params.with.email : user.email;
     

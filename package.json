@@ -26,7 +26,6 @@
         "express": "^4.17.1",
         "express-list-endpoints": "^5.0.0",
         "mongoose": "^5.10.9",
-        "mongoose-long": "^0.3.2",
         "nodemon": "^2.0.6",
         "unique-names-generator": "^4.3.1",
         "uuid": "^8.3.1",
