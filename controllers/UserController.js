@@ -25,14 +25,6 @@ module.exports = {
 
 
 /**
- * Loading Long data type for mongoose
- */
-
-require('mongoose-long')(mongoose);
-const { Types: {Long} } = mongoose;
-
-
-/**
  * Creates new User while check for cred valididty with input
  * 
  * params = {
