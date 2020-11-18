@@ -3,7 +3,8 @@
  */
 
 const mongoose = require("mongoose");
-const { Schema } = mongoose;
+require('mongoose-long')(mongoose);
+const { Schema, Types: { Long }} = mongoose;
 
 
 /**
@@ -28,7 +29,7 @@ const userSchema = new Schema({
         require: true
     },
     steamid: {
-        type: BigInt,
+        type: Long,
         require: true,
         default: null
     },
