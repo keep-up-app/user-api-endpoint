@@ -4,7 +4,7 @@
 
 const mongoose = require("mongoose");
 require('mongoose-long')(mongoose);
-const { Schema, Types: { Long }} = mongoose;
+const { Schema, Types: {Long} } = mongoose;
 
 
 /**

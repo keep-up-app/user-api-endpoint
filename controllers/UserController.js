@@ -25,6 +25,14 @@ module.exports = {
 
 
 /**
+ * Loading Long data type for mongoose
+ */
+
+require('mongoose-long')(mongoose);
+const { Types: {Long} } = mongoose;
+
+
+/**
  * Creates new User while check for cred valididty with input
  * 
  * params = {
@@ -162,6 +170,8 @@ function update(params) {
             }
             
             user.steamid = params.with.steamid != undefined ? parseInt(params.with.steamid) : user.steamid;
+            user.steamid = user.steamid.divide(Long.fromString('2'));
+            
             user.username = params.with.username != undefined ? params.with.username : user.username;
             user.email = params.with.email != undefined ? params.with.email : user.email;
     
