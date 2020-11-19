@@ -36,6 +36,7 @@ describe('GET/ destroy', function() {
 
     it('delete user with VALID email', done => {
         request(server).delete('/user/destroy')
+            .set('Authorization', JsonUserProfile.token)
             .send({
                 email: validEmail
             }).end((err, res) => {
@@ -47,6 +48,7 @@ describe('GET/ destroy', function() {
 
     it('delete user with UNKNOWN email', done => {
         request(server).delete('/user/destroy')
+            .set('Authorization', JsonUserProfile.token)
             .send({
                 email: unknownEmail
             }).end((err, res) => {
@@ -57,6 +59,7 @@ describe('GET/ destroy', function() {
 
     it('delete user with INVALID OPERATION', done => {
         request(server).delete('/user/destroy')
+            .set('Authorization', JsonUserProfile.token)
             .send({
                 password: validPassword
             }).end((err, res) => {

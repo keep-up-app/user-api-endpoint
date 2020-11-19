@@ -40,56 +40,59 @@ describe('GET/ update', function() {
 
     it('update user with VALID username, password, steamid', done => {
         request(server).put('/user/update')
-        .send({
-            find: {
-                email: validEmail
-            },
-            with: {
-                steamid: validSteamId,
-                username: validUsername,
-                password: {
-                    first: validPassword,
-                    second: validPassword
+            .set('Authorization', JsonUserProfile.token)
+            .send({
+                find: {
+                    email: validEmail
+                },
+                with: {
+                    steamid: validSteamId,
+                    username: validUsername,
+                    password: {
+                        first: validPassword,
+                        second: validPassword
+                    }
                 }
-            }
-        }).end((err, res) => {
-            expect(res.statusCode).to.equal(200);
-            expect(res.body.steamid).to.equal(validSteamId);
-            expect(res.body.username).to.equal(validUsername);
-            expect(res.body.password).to.equal(validPassword);
-            done();
-        });
+            }).end((err, res) => {
+                expect(res.statusCode).to.equal(200);
+                expect(res.body.steamid).to.equal(validSteamId);
+                expect(res.body.username).to.equal(validUsername);
+                expect(res.body.password).to.equal(validPassword);
+                done();
+            });
     });
 
     it('update user with INVALID steamid', done => {
         request(server).put('/user/update')
-        .send({
-            find: {
-                email: validEmail
-            },
-            with: {
-                steamid: invalidSteamId,
-            }
-        }).end((err, res) => {
-            expect(res.statusCode).to.equal(400);
-            expect(res.body.error).to.equal("Invalid SteamID.");
-            done();
-        });
+            .set('Authorization', JsonUserProfile.token)
+            .send({
+                find: {
+                    email: validEmail
+                },
+                with: {
+                    steamid: invalidSteamId,
+                }
+            }).end((err, res) => {
+                expect(res.statusCode).to.equal(400);
+                expect(res.body.error).to.equal("Invalid SteamID.");
+                done();
+            });
     });
 
     it('update user with INVALID username', done => {
         request(server).put('/user/update')
-        .send({
-            find: {
-                username: invalidUsername
-            },
-            with: {
-                steamid: validSteamId
-            },
-        }).end((err, res) => {
-            expect(res.statusCode).to.equal(400);
-            expect(res.body.error).to.equal("Missing Username.");
-            done();
-        });
+            .set('Authorization', JsonUserProfile.token)
+            .send({
+                find: {
+                    username: invalidUsername
+                },
+                with: {
+                    steamid: validSteamId
+                },
+            }).end((err, res) => {
+                expect(res.statusCode).to.equal(400);
+                expect(res.body.error).to.equal("Missing Username.");
+                done();
+            });
     });
 });
