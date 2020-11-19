@@ -148,6 +148,8 @@ function update(params) {
         await validator.make(params.find).catch(err => reject(err));
         await validator.make(params.with).catch(err => reject(err));
 
+        console.log(params);
+
         var user = await this.find(params.find).catch(err => reject(err));
         
         if (!user) {
@@ -156,6 +158,8 @@ function update(params) {
                 code: 404 });
 
         } else {
+            console.log('user exists: ' + user);
+        
             if (params.with.password) {
                 let invPwd = validator.match(params.with.password)
                 if (invPwd == null) user.password = params.with.password != undefined ? params.with.password.first : user.password;
@@ -166,6 +170,8 @@ function update(params) {
             user.username = params.with.username != undefined ? params.with.username : user.username;
             user.email = params.with.email != undefined ? params.with.email : user.email;
     
+            console.log('saving new user: ' + user);
+
             await user.save().catch(err => reject({
                 message: "Error updating User",
                 details: err.message,
