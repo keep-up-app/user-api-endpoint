@@ -67,16 +67,13 @@ function create(params) {
                         code: 500
                     }));
 
-                    console.log(key);
-                    console.log(key.temp_secret);
-
                     let user = new User({
                         _id: uuid(),
                         username: ung.uniqueNamesGenerator(generator.UngConfig),
                         email: email,
                         password: password,
                         token: generator.generateToken(30),
-                        secret: key.temp_secret,
+                        secret: key.data.temp_secret,
                         created_at: new Date().toDateString()
                     });
             
