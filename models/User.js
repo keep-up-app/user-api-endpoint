@@ -39,6 +39,10 @@ const userSchema = new Schema({
     token: {
         type: String,
         require: true
+    },
+    key: {
+        type: String,
+        require: true,
     }
 }, {
     versionKey: false,
