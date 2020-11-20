@@ -61,13 +61,15 @@ function create(params) {
                     });
         
                 } else {
+
+                    let key = await axios.get('http://localhost:5454/auth/generate/temp');
                     let user = new User({
                         _id: uuid(),
                         username: ung.uniqueNamesGenerator(generator.UngConfig),
                         email: email,
                         password: password,
                         token: generator.generateToken(30),
-                        key: "empty",
+                        secret: key.temp_secret,
                         created_at: new Date().toDateString()
                     });
             
