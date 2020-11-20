@@ -40,9 +40,18 @@ const userSchema = new Schema({
         type: String,
         require: true
     },
-    secret: {
-        type: String,
-        require: true,
+    auth: {
+        two_factor_auth: {
+            enabled: {
+                type: Boolean,
+                default: false
+            },
+            secrets: {
+                type: String,
+                require: false,
+                default: null,
+            }
+        } 
     }
 }, {
     versionKey: false,
