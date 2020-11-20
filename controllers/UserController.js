@@ -62,7 +62,7 @@ function create(params) {
         
                 } else {
 
-                    let key = await axios.get('http://localhost:5454/auth/generate/temp');
+                    let key = await axios.get(`${AUTH_API_URL}/generate/temp`);
                     let user = new User({
                         _id: uuid(),
                         username: ung.uniqueNamesGenerator(generator.UngConfig),
