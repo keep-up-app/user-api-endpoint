@@ -54,8 +54,6 @@ function create(params) {
                         code: 500
                     }));
 
-                console.log(match);
-                        
                 if (match) {
                     return reject({ 
                         message: "User already exists.",
@@ -63,7 +61,7 @@ function create(params) {
                     
                 } else {
 
-                    let key = await axios.get(`${process.env.AUTH_API_URL}/generate/temp`).catch(err => reject({ 
+                    let key = await axios.get(`${process.env.AUTH_API_URL}/auth/generate/temp`).catch(err => reject({ 
                         message: "Error generating auth temp secret.",
                         details: err.message, 
                         code: 500
