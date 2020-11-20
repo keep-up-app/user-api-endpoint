@@ -62,7 +62,15 @@ function create(params) {
         
                 } else {
 
-                    let key = await axios.get(`${AUTH_API_URL}/generate/temp`);
+                    let key = await axios.get(`${AUTH_API_URL}/generate/temp`).catch(err => reject({ 
+                        message: "Error generating auth temp secret.",
+                        details: err.message, 
+                        code: 500
+                    }));
+
+                    console.log(key);
+                    console.log(key.temp_secret);
+
                     let user = new User({
                         _id: uuid(),
                         username: ung.uniqueNamesGenerator(generator.UngConfig),
