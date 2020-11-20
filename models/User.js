@@ -41,17 +41,15 @@ const userSchema = new Schema({
         require: true
     },
     auth: {
-        two_factor_auth: {
-            enabled: {
-                type: Boolean,
-                default: false
-            },
-            secrets: {
-                type: String,
-                require: false,
-                default: null,
-            }
-        } 
+        enabled: {
+            type: Boolean,
+            default: false
+        },
+        secrets: {
+            type: String,
+            require: false,
+            default: null,
+        }
     }
 }, {
     versionKey: false,
