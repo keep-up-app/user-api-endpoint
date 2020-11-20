@@ -53,7 +53,7 @@ function create(params) {
                         details: err.message,
                         code: 500
                     }));
-                    
+
                 console.log(match);
                         
                 if (match) {
@@ -63,7 +63,7 @@ function create(params) {
                     
                 } else {
 
-                    let key = await axios.get(`${AUTH_API_URL}/generate/temp`).catch(err => reject({ 
+                    let key = await axios.get(`${process.env.AUTH_API_URL}/generate/temp`).catch(err => reject({ 
                         message: "Error generating auth temp secret.",
                         details: err.message, 
                         code: 500
