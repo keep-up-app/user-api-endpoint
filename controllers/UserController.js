@@ -53,13 +53,14 @@ function create(params) {
                         details: err.message,
                         code: 500
                     }));
+                    
+                console.log(match);
                         
                 if (match) {
                     return reject({ 
                         message: "User already exists.",
-                        code: 400
-                    });
-        
+                        code: 400 });
+                    
                 } else {
 
                     let key = await axios.get(`${AUTH_API_URL}/generate/temp`).catch(err => reject({ 
