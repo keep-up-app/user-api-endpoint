@@ -45,7 +45,7 @@ const userSchema = new Schema({
             type: Boolean,
             default: false
         },
-        secrets: {
+        secret: {
             type: String,
             require: false,
             default: null,
