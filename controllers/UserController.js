@@ -45,9 +45,9 @@ function create(params) {
             if (invPwd == null) {
     
                 let email = params.email;
-                let password = params.password.first;
-                let tempSecret = params.auth.secret;
-                let TFAenabled = params.auth.enabled;
+                let password = params.password[0];
+                let tempSecret = params.auth.secret || false;
+                let TFAenabled = params.auth.enabled || "";
 
                 let match = await User.findOne({ email: email })
                     .catch(err => reject({
@@ -164,7 +164,7 @@ function update(params) {
         } else {
             if (params.with.password) {
                 let invPwd = validator.match(params.with.password)
-                if (invPwd == null) user.password = params.with.password != undefined ? params.with.password.first : user.password;
+                if (invPwd == null) user.password = params.with.password[0] || user.password;
                 else return reject(invPwd);
             }
             
