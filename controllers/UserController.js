@@ -46,7 +46,7 @@ function create(params) {
     
                 let email = params.email;
                 let password = params.password.first;
-                let tempSecret = params.auth.temp_secret;
+                let tempSecret = params.auth.secret;
                 let TFAenabled = params.auth.enabled;
 
                 let match = await User.findOne({ email: email })
