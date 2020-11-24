@@ -46,7 +46,9 @@ function create(params) {
     
                 let email = params.email;
                 let password = params.password.first;
-                
+                let tempSecret = params.auth.temp_secret;
+                let TFAenabled = params.auth.enabled;
+
                 let match = await User.findOne({ email: email })
                     .catch(err => reject({
                         message: "An error occured.",
@@ -66,7 +68,10 @@ function create(params) {
                         username: ung.uniqueNamesGenerator(generator.UngConfig),
                         email: email,
                         password: password,
-                        token: generator.generateToken(30),
+                        auth: {
+                            enabled: TFAenabled,
+                            secret: tempSecret
+                        },
                         created_at: new Date().toDateString(),
                     });
             
