@@ -45,7 +45,7 @@ function create(params) {
             if (invPwd == null) {
     
                 let email = params.email;
-                let password = params.password;
+                let password = params.password.first;
                 let tempSecret = params.auth.secret || false;
                 let TFAenabled = params.auth.enabled || "";
 
@@ -164,7 +164,7 @@ function update(params) {
         } else {
             if (params.with.password) {
                 let invPwd = validator.match(params.with.password)
-                if (invPwd == null) user.password = params.with.password != undefined ? params.with.password : user.password;
+                if (invPwd == null) user.password = params.with.password != undefined ? params.with.password.first : user.password;
                 else return reject(invPwd);
             }
             
