@@ -22,10 +22,10 @@ module.exports = {
  * @param {Object} passwords 
  */
 
-function match(password) {
+function match(passwords) {
 
-    let pwd1 = password[0];
-    let pwd2 = password[1];
+    let pwd1 = passwords.first;
+    let pwd2 = passwords.second;
     
     if (pwd1 != pwd2) return ({
         message: "Password does not match.",
