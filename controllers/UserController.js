@@ -14,6 +14,7 @@ const generator = require('../util/generator');
 const mongoose = require("mongoose");
 const uuid = require('uuid-random');
 const ung = require('unique-names-generator');
+const axios = require('axios');
 const User = mongoose.model("User");
 
 module.exports = {
@@ -167,7 +168,10 @@ function update(params) {
             }
             
             user.auth.enabled = params.with.auth.enabled != undefined ? params.with.auth.enabled : user.auth.enabled;
-            user.auth.token = params.with.auth.token != undefined ? params.with.auth.token : user.auth.token;
+            
+            if (user.auth.enabled)
+                user.auth.secret = axios.get(`${process.env.AUTH_BASE_URL}/auth/generate/secret/base32/20`);
+
             user.steamid = params.with.steamid != undefined ? params.with.steamid : user.steamid;
             user.username = params.with.username != undefined ? params.with.username : user.username;
             user.email = params.with.email != undefined ? params.with.email : user.email;
@@ -177,6 +181,8 @@ function update(params) {
                 details: err.message,
                 code: 500
             }));
+
+            user.auth.secret = null;
     
             return resolve(user);
         }
