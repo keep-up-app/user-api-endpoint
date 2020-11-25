@@ -167,11 +167,16 @@ function update(params) {
                 else return reject(invPwd);
             }
             
-            user.auth.enabled = params.with.auth.enabled != undefined ? params.with.auth.enabled : user.auth.enabled;
-            
-            if (user.auth.enabled)
-                user.auth.secret = await axios.get(`${process.env.AUTH_BASE_URL}/auth/generate/secret/base32/20`)['secret'];
-            else user.auth.secret = user.auth.secret;
+            if (params.with.auth != undefined) {
+                if (params.auth.enabled && !user.auth.enabled) {
+                    user.auth.secret = await axios.get(`${process.env.AUTH_BASE_URL}/auth/generate/secret/base32/20`)['secret'];
+                    user.auth.enabled = true;
+                }
+                else {
+                    user.auth.enabled = false;
+                    user.auth.secret = null;
+                }
+            }
 
             user.steamid = params.with.steamid != undefined ? params.with.steamid : user.steamid;
             user.username = params.with.username != undefined ? params.with.username : user.username;
