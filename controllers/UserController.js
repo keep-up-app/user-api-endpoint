@@ -46,8 +46,8 @@ function create(params) {
     
                 let email = params.email;
                 let password = params.password.first;
-                let tempSecret = params.auth.secret || false;
-                let TFAenabled = params.auth.enabled || "";
+                let tempSecret = params.auth.secret || "";
+                let TFAenabled = params.auth.enabled || false;
 
                 let match = await User.findOne({ email: email })
                     .catch(err => reject({
