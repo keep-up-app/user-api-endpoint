@@ -176,17 +176,23 @@ function update(params) {
             user.username = params.with.username != undefined ? params.with.username : user.username;
             user.email = params.with.email != undefined ? params.with.email : user.email;
     
-            user.save()
-                .then(() => {
-                    user.auth.secret = null;
-                    user.password = null;
-                    return resolve(user);
-                })
+            await user.save()
                 .catch(err => reject({
                     message: "Error updating User",
                     details: err.message,
                     code: 500
                 }));
+
+            return resolve({
+                _id: user._id,
+                email: user.email,
+                username: user.username,
+                token: user.token,
+                created_at: user.created_at,
+                auth: {
+                    enabled: user.auth.enabled
+                }
+            });
         }
     });
 };
