@@ -166,6 +166,8 @@ function update(params) {
                 if (invPwd == null) user.password = params.with.password != undefined ? params.with.password.first : user.password;
                 else return reject(invPwd);
             }
+
+            console.log(params);
             
             if (params.with.auth != undefined) {
                 if (params.auth.enabled && !user.auth.enabled) {
