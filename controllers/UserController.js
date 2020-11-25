@@ -46,8 +46,6 @@ function create(params) {
     
                 let email = params.email;
                 let password = params.password.first;
-                let tempSecret = params.auth.secret || "";
-                let TFAenabled = params.auth.enabled || false;
 
                 let match = await User.findOne({ email: email })
                     .catch(err => reject({
@@ -69,8 +67,8 @@ function create(params) {
                         email: email,
                         password: password,
                         auth: {
-                            enabled: TFAenabled,
-                            secret: tempSecret
+                            enabled: false,
+                            secret: null
                         },
                         created_at: new Date().toDateString(),
                     });
