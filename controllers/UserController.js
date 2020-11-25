@@ -170,7 +170,7 @@ function update(params) {
             user.auth.enabled = params.with.auth.enabled != undefined ? params.with.auth.enabled : user.auth.enabled;
             
             if (user.auth.enabled)
-                user.auth.secret = axios.get(`${process.env.AUTH_BASE_URL}/auth/generate/secret/base32/20`);
+                user.auth.secret = await axios.get(`${process.env.AUTH_BASE_URL}/auth/generate/secret/base32/20`);
 
             user.steamid = params.with.steamid != undefined ? params.with.steamid : user.steamid;
             user.username = params.with.username != undefined ? params.with.username : user.username;
