@@ -166,6 +166,8 @@ function update(params) {
                 else return reject(invPwd);
             }
             
+            user.auth.enabled = params.with.auth.enabled != undefined ? params.with.auth.enabled : user.auth.enabled;
+            user.auth.token = params.with.auth.token != undefined ? params.with.auth.token : user.auth.token;
             user.steamid = params.with.steamid != undefined ? params.with.steamid : user.steamid;
             user.username = params.with.username != undefined ? params.with.username : user.username;
             user.email = params.with.email != undefined ? params.with.email : user.email;
