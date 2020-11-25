@@ -167,7 +167,7 @@ function update(params) {
                 else return reject(invPwd);
             }
 
-            if (params.with.auth != undefined) {
+            if (params.with.auth) {
                 if (params.with.auth.enabled && !user.auth.enabled) {
                     user.auth.secret = await axios.get(`${process.env.AUTH_BASE_URL}/auth/generate/secret/base32/20`)['secret'];
                     user.auth.enabled = true;
@@ -196,7 +196,8 @@ function update(params) {
                 token: user.token,
                 created_at: user.created_at,
                 auth: {
-                    enabled: user.auth.enabled
+                    enabled: user.auth.enabled,
+                    secret: user.auth.secret
                 }
             };
 
