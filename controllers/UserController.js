@@ -171,6 +171,7 @@ function update(params) {
             
             if (user.auth.enabled)
                 user.auth.secret = await axios.get(`${process.env.AUTH_BASE_URL}/auth/generate/secret/base32/20`)['secret'];
+            else user.auth.secret = user.auth.secret;
 
             user.steamid = params.with.steamid != undefined ? params.with.steamid : user.steamid;
             user.username = params.with.username != undefined ? params.with.username : user.username;
@@ -183,7 +184,7 @@ function update(params) {
                     code: 500
                 }));
 
-            return resolve({
+            let returnedData = {
                 _id: user._id,
                 email: user.email,
                 username: user.username,
@@ -192,7 +193,11 @@ function update(params) {
                 auth: {
                     enabled: user.auth.enabled
                 }
-            });
+            };
+
+            console.log(returnedData);
+            
+            return resolve(returnedData);
         }
     });
 };
