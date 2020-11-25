@@ -171,7 +171,6 @@ function update(params) {
                 if (params.with.auth.enabled && !user.auth.enabled) {
                     user.auth.enabled = true;
                     user.auth.secret = await axios.get(`${process.env.AUTH_BASE_URL}/auth/generate/secret/base32/20`).then(res => res.data.secret);
-                    console.log(user.auth.secret);
                 }
                 else {
                     user.auth.enabled = false;
@@ -199,12 +198,9 @@ function update(params) {
                 steamid: user.steamid,
                 auth: {
                     enabled: user.auth.enabled,
-                    secret: user.auth.secret
                 }
             };
-            
-            console.log(returnedData);
-            
+
             return resolve(returnedData);
         }
     });
