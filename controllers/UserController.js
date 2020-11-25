@@ -195,6 +195,7 @@ function update(params) {
                 username: user.username,
                 token: user.token,
                 created_at: user.created_at,
+                steamid: user.steamid,
                 auth: {
                     enabled: user.auth.enabled,
                     secret: user.auth.secret
