@@ -74,7 +74,7 @@ router.delete('/destroy', async(req, res) => {
             .then(info => res.send({ success: info }))
             .catch(err => { return res.status(err.code).send({ error: err.message, details: err.details }) });
     } else {
-        return res.sendStatus(345);
+        return res.sendStatus(403);
     }
 });
 
