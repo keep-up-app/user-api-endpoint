@@ -58,7 +58,7 @@ function make (fields) {
             var field = fields[key];
             var error = null;
 
-            if (field == "" || field == null || field == "null") 
+            if ((field == "" || field == null || field == "null") && field != 'steamid') 
                 return reject({ message: `Missing ${key.charAt(0).toUpperCase() + key.slice(1)}.`, code: 400 });
 
             if (key == 'password' && typeof field !== 'object')
@@ -98,7 +98,7 @@ function validateUuid(uuid) {
 
 function validateSteamId(id) {
     let regex = /^[0-9]{17}$/;
-    if (!regex.test(parseInt(id)))
+    if (!regex.test(parseInt(id)) && id != null)
         return "Invalid SteamID.";
     return null;
 }

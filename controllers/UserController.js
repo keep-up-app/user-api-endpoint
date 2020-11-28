@@ -189,7 +189,7 @@ function update(params) {
                     code: 500
                 }));
 
-            let returnedData = {
+            return resolve({
                 _id: user._id,
                 email: user.email,
                 username: user.username,
@@ -199,9 +199,7 @@ function update(params) {
                 auth: {
                     enabled: user.auth.enabled,
                 }
-            };
-
-            return resolve(returnedData);
+            });
         }
     });
 };
