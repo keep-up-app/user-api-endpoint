@@ -99,11 +99,10 @@ router.get('/checkToken', async(req, res) => {
  */
 
 const checkTokenAuth = async (req) => {
-    console.log(req);
     let token = req.get('Authorization');
     let user = await UserController.find({ token: token })
         .catch(err => { return {
-            message: err,
-            code: 403 }});
+            message: err.message,
+            code: err.code }});
     return user ? 204 : 403; 
 }
