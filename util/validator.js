@@ -58,7 +58,7 @@ function make (fields) {
             var field = fields[key];
             var error = null;
 
-            if ((field == "" || field == null || field == "null") && field != 'steamid') 
+            if ((field == "" || field == null || field == "null") && key != 'steamid') 
                 return reject({ message: `Missing ${key.charAt(0).toUpperCase() + key.slice(1)}.`, code: 400 });
 
             if (key == 'password' && typeof field !== 'object')
