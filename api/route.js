@@ -55,7 +55,7 @@ router.put('/update', async(req, res) => {
             .then(user => res.send(user))
             .catch(err => { return res.status(err.code).send({ error: err.message, details: err.details }) });
     } else {
-        return res.sendStatus(403);
+        return res.status(err.code).send({ error: err.message, details: err.details })
     }
 });
 
@@ -74,7 +74,7 @@ router.delete('/destroy', async(req, res) => {
             .then(info => res.send({ success: info }))
             .catch(err => { return res.status(err.code).send({ error: err.message, details: err.details }) });
     } else {
-        return res.sendStatus(403);
+        return res.status(err.code).send({ error: err.message, details: err.details })
     }
 });
 
@@ -102,6 +102,8 @@ const checkTokenAuth = async (req) => {
     console.log(req);
     let token = req.get('Authorization');
     let user = await UserController.find({ token: token })
-        .catch(err => { return console.log(err) });
+        .catch(err => { return {
+            message: err,
+            code: 403 }});
     return user ? 204 : 403; 
 }
