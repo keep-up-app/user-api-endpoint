@@ -102,6 +102,6 @@ const checkTokenAuth = async (req) => {
     console.log(req);
     let token = req.get('Authorization');
     let user = await UserController.find({ token: token })
-        .catch(err => console.log(err));
+        .catch(err => { return console.log(err) });
     return user ? 204 : 403; 
 }
