@@ -1,9 +1,13 @@
 {
-    "_id": "c219fd0d-788b-4532-b75f-a0b9e3ea783f",
-    "username": "WHITE-DONKEY",
-    "email": "example@email.com",
-    "password": "example1234",
+    "_id": "c6d72b4f-191d-4a40-9aab-72eaf24ac054",
+    "auth": {
+        "enabled": false,
+        "secret": null
+    },
     "steamid": "76561198272843849",
-    "created_at": "2020-10-30T17:24:17.761Z",
-    "token": "f7dabe2aaabd25a231152fc281dd04"
+    "username": "SWEET-RAVEN",
+    "email": "forTests@donot.remove",
+    "password": "example1234",
+    "token": "c4943d10f61a236f91f052e755cca3",
+    "created_at": "Sat Dec 05 2020"
 }

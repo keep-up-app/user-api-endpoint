@@ -5,6 +5,8 @@
 const parser = require('body-parser');
 const request = require('supertest');
 const server = require('../server');
+const JsonUserProfile = require('./json/profile.json');
+
 server.use(parser.json());
 
 
@@ -31,7 +33,7 @@ function init(tests) {
 
     describe('TEST ENV INITIALIZATION', () => {
         it('', done => {
-            request(server).delete("/user/destroy", { email: "example@email.com" })
+            request(server).delete("/user/destroy", { email: JsonUserProfile.email })
             .end((err, res) => { done(); }); }); });
 
     for(test in tests)

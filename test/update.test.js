@@ -57,7 +57,7 @@ describe('GET/ update', function() {
                 expect(res.statusCode).to.equal(200);
                 expect(res.body.steamid).to.equal(validSteamId);
                 expect(res.body.username).to.equal(validUsername);
-                expect(res.body.password).to.equal(validPassword);
+                expect(res.body.password).to.equal(undefined);
                 done();
             });
     });
