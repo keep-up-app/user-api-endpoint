@@ -9,6 +9,7 @@ require('../models/User');
  * Load all dependencies
  */
 
+const encryption = require('../util/encryption');
 const validator = require('../util/validator');
 const generator = require('../util/generator');
 const mongoose = require("mongoose");
@@ -37,7 +38,7 @@ module.exports = {
  */
 
 function create(params) {
-    return new Promise((resolve, reject) => {
+    return new Promise(async(resolve, reject) => {
 
         validator.make(params).then(async() => {
             let invPwd = validator.match(params.password);
@@ -61,11 +62,14 @@ function create(params) {
                     
                 } else {
 
+                    let hashedPassword = encryption.hashPassword(password);
+                    console.log(hashedPassword);
+
                     let user = new User({
                         _id: uuid(),
                         username: ung.uniqueNamesGenerator(generator.UngConfig),
                         email: email,
-                        password: password,
+                        password: hashedPassword,
                         token: generator.generateToken(),
                         auth: {
                             enabled: false,
@@ -104,7 +108,7 @@ function create(params) {
 
 function find(params) {
     return new Promise(async(resolve, reject) => {
-        
+
         await validator.make(params).catch(err => reject(err));
 
         if (await !User.exists(params)) {
@@ -113,20 +117,28 @@ function find(params) {
                 code: 404 });
 
         } else {
-            var user = await User.find(params)
-            .then(users => users[0])
-            .catch(err => reject({
-                message: "Error finding user.",
-                details: err.message,
-                code: 500,
-            }));
-        
-            if(!user) return reject({
-                message: "User not found.",
-                code: 404
-            });
 
-            return resolve(user);
+            let password = params.password;
+            delete params.password;
+
+            User.findOne(params)
+                .then(async user => {
+
+                    var validPassword = false;
+                    if (password) validPassword = encryption.checkPassword(password, user.password);
+
+                    if(!user || user.length == 0 || !validPassword) return reject({
+                        message: "User not found.",
+                        code: 404
+                    });
+        
+                    return resolve(user);
+                })
+                .catch(err => reject({
+                    message: "Error finding user.",
+                    details: err.message,
+                    code: 500,
+                }));
         }
     });
 };
