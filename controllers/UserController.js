@@ -124,14 +124,16 @@ function find(params) {
             User.findOne(params)
                 .then(async user => {
 
-                    var validPassword = false;
-                    if (password) validPassword = encryption.checkPassword(password, user.password);
-
                     if(!user || user.length == 0 || !validPassword) return reject({
                         message: "User not found.",
                         code: 404
                     });
-        
+
+                    if (encryption.checkPassword(password, user.password)) return reject({
+                        message: "User not found.",
+                        code: 404
+                    });
+
                     return resolve(user);
                 })
                 .catch(err => reject({
