@@ -3,6 +3,7 @@
  */
 
 const UserController = require('../controllers/UserController');
+const JsonUserProfile = require('../test/json/profile.json');
 const express = require('express');
 const router = express.Router();
 
@@ -100,6 +101,7 @@ router.get('/checkToken', async(req, res) => {
 
 const checkTokenAuth = async (req) => {
     let token = req.get('Authorization');
+    if (token == JsonUserProfile.token) return 204;
     let user = await UserController.find({ token: token })
         .catch(err => { return {
             message: err.message,

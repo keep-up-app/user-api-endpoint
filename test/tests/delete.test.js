@@ -4,10 +4,10 @@
 
 const parser = require('body-parser');
 const request = require('supertest');
-const server = require('../server');
+const server = require('./../../server');
 const chai = require('chai');
 const chaiHttp = require('chai-http');
-const JsonUserProfile = require('./json/profile.json');
+const JsonUserProfile = require('./../json/profile.json');
 
 
 /**

@@ -61,15 +61,12 @@ function create(params) {
                         code: 400 });
                     
                 } else {
-
-                    let hashedPassword = encryption.hashPassword(password);
-                    console.log(hashedPassword);
-
+                    
                     let user = new User({
                         _id: uuid(),
                         username: ung.uniqueNamesGenerator(generator.UngConfig),
                         email: email,
-                        password: hashedPassword,
+                        password: encryption.hashPassword(password),
                         token: generator.generateToken(),
                         auth: {
                             enabled: false,
@@ -124,12 +121,12 @@ function find(params) {
             User.findOne(params)
                 .then(async user => {
 
-                    if(!user || user.length == 0 || !validPassword) return reject({
+                    if(!user || user.length == 0) return reject({
                         message: "User not found.",
                         code: 404
                     });
 
-                    if (encryption.checkPassword(password, user.password)) return reject({
+                    if (password && !encryption.checkPassword(password, user.password)) return reject({
                         message: "User not found.",
                         code: 404
                     });
@@ -177,7 +174,7 @@ function update(params) {
         } else {
             if (params.with.password) {
                 let invPwd = validator.match(params.with.password)
-                if (invPwd == null) user.password = params.with.password != undefined ? params.with.password.first : user.password;
+                if (invPwd == null) user.password = params.with.password != undefined ? encryption.hashPassword(params.with.password.first) : user.password;
                 else return reject(invPwd);
             }
 

@@ -1,13 +1,13 @@
 {
-    "_id": "c6d72b4f-191d-4a40-9aab-72eaf24ac054",
-    "auth": {
-        "enabled": false,
-        "secret": null
-    },
-    "steamid": "76561198272843849",
-    "username": "SWEET-RAVEN",
-    "email": "forTests@donot.remove",
-    "password": "example1234",
-    "token": "c4943d10f61a236f91f052e755cca3",
-    "created_at": "Sat Dec 05 2020"
+  "_id": "09cbae36-35a8-4164-9461-ed4794ac7ff1",
+  "auth": {
+    "enabled": false,
+    "secret": null
+  },
+  "steamid": null,
+  "username": "CAPABLE-HUMMINGBIRD",
+  "email": "testing@email.test",
+  "password": "$2b$10$bQO5cWFgg.f7eg4C6Jxa7.7Sxd2s12QgVOwBForzj.L2AghUcPzDi",
+  "token": "2994beb18c3b4889083299d56072b4",
+  "created_at": "Tue Dec 08 2020"
 }

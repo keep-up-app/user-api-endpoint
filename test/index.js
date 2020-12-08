@@ -29,13 +29,23 @@ init([
  * @param {Array} tests 
  */
 
-function init(tests) {
-
-    describe('TEST ENV INITIALIZATION', () => {
-        it('', done => {
-            request(server).delete("/user/destroy", { email: JsonUserProfile.email })
-            .end((err, res) => { done(); }); }); });
-
+async function init(tests) {
+    
+    await removeEmail(JsonUserProfile);
+    
     for(test in tests)
-        require(`./${tests[test]}.test`);
+        require(`./tests/${tests[test]}.test`);
+
+    await removeEmail(JsonUserProfile);
+}
+
+
+/**
+ * Remove Helper function by email
+ * @param {Object} json
+ */
+
+async function removeEmail(json) {
+    request(server).delete("/user/destroy", { email: JsonUserProfile.email })
+        .set('Authorization', JsonUserProfile.token)
 }
