@@ -42,7 +42,7 @@ describe('GET/ destroy', function() {
             }).end((err, res) => {
                 expect(res.statusCode).to.equal(200);
                 expect(res.body.success).to.equal("User profile deleted :(");
-                done();
+                done(); 
             });
     });
 
