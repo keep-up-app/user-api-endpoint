@@ -1,4 +1,4 @@
-[![game-workflow-shield]][game-repo]
+[![user-workflow-shield]][user-repo]
 
 
 # User Endpoint
@@ -141,7 +141,7 @@ The body of this request is composed of two segments:
 |param|description|type|default|
 |---:|---|:---:|:---:| 
 | **`username`** | The username of the user |*string* |
-| **`password`** |  The **encrypted** password of the user |*string* |
+| **`password`** |  The new password of the user |*string* |
 | **`email`** | A valid email address of the user to receive notifications with |*string* |
 | **`steamid`** | The unique base64 id attributed to each Steam user |*integer* |*null* |
 | **`auth:enabled`** | Determines whether the user has two factor authentification enabled on the account. If enabled, login method changes for this user globally. If a smartphone  application were to be developped and the user signed in, they would go through the two-step verification process |*boolean* |
@@ -172,10 +172,36 @@ Note how `auth:enabled` is now set to **true**. This user now has an account the
 </br>
 
 
+* ### **`/user/destroy`**
 
+##### Description: Deletes an existing user's information
 
+#### NOTE: Only the owner of the account who has access to the `token` can delete their account
 
+> * http verb: *`DELETE`*
+> * reponse code: `200`
+> * response type: *JSON*
+>
+> Returns a success message
 
+##### Url Body Paramaters:
+
+|param|description|type|default|
+|---:|---|:---:|:---:| 
+| **`email`** | A valid email address of the user to receive notifications with |*string* |
+| **`steamid`** | The unique base64 id attributed to each Steam user |*integer* |*null* |
+
+#### Usage
+
+Delete a user with `email` **example@email.com**:
+
+Will yeild:
+
+```json
+{
+    "success": "User profile deleted :("
+}
+```
 
 [user-workflow-shield]: https://github.com/noahgreff/user-api-endpoint/workflows/User%20Endpoint%20CI/badge.svg
 [user-repo]: https://github.com/noahgreff/user-api-endpoint/
