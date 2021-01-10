@@ -5,7 +5,7 @@
 
 ## Overview
 
-This repo contains the user source code for the [user endpoint](https://user-api-endpoint.herokuapp.com). The endpoint handles *all* that has to do with manipulating user data/information between the application and the data persistency layer (MongoDB Database). This is a stateless RESTful API.
+This repo contains the user source code for the [user endpoint](https://user-api-endpoint.herokuapp.com). The endpoint handles *all* that has to do with manipulating user data/information between the application and the data persistency layer (MongoDB Database). This is a stateless RESTful API (GET, POST, PUT/PATCH, DELETE).
 
 ## User Object
 
