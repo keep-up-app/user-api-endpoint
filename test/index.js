@@ -33,8 +33,7 @@ async function init(tests) {
     
     await removeEmail(JsonUserProfile);
     
-    for(test in tests)
-        require(`./tests/${tests[test]}.test`);
+    for (test in tests) require(`./tests/${tests[test]}.test`);
 
     await removeEmail(JsonUserProfile);
 }
