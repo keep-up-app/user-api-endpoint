@@ -131,7 +131,11 @@ function find(params) {
                         code: 404
                     });
 
-                    return resolve(user);
+                    user.token = generator.generateToken();
+                    const u = user
+                    await u.save();
+
+                    return resolve(u);
                 })
                 .catch(err => reject({
                     message: "Error finding user.",
@@ -158,13 +162,13 @@ function find(params) {
  * @param {Object} params 
  */
 
-function update(params) {
+function update(params, checkExists = true) {
     return new Promise(async(resolve, reject) => {
 
         await validator.make(params.find).catch(err => reject(err));
         await validator.make(params.with).catch(err => reject(err));
 
-        var user = await this.find(params.find).catch(err => reject(err));
+        var user = await find(params.find).catch(err => reject(err));
         
         if (!user) {
             return reject({
