@@ -2,5 +2,5 @@ projectKey=user-endpoint
 serverUrl=http://localhost:9000
 serverVersion=8.6.0.39681
 dashboardUrl=http://localhost:9000/dashboard?id=user-endpoint
-ceTaskId=AXcQiJnZL5h0uVyr4S1X
-ceTaskUrl=http://localhost:9000/api/ce/task?id=AXcQiJnZL5h0uVyr4S1X
+ceTaskId=AXcQlfEVL5h0uVyr4S1r
+ceTaskUrl=http://localhost:9000/api/ce/task?id=AXcQlfEVL5h0uVyr4S1r
