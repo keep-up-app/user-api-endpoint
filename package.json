@@ -2,10 +2,10 @@
     "name": "user-api-endpoint",
     "version": "1.0.0",
     "description": "Handles everything that has to do with KeepUp users",
-    "main": "index.js",
+    "main": "server.js",
     "scripts": {
-        "start": "node index.js",
-        "watch": "nodemon index.js",
+        "start": "node server.js",
+        "watch": "nodemon server.js",
         "test": "mocha test/index.js --timeout 10000 --exit"
     },
     "repository": {
