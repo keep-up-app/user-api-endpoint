@@ -19,10 +19,10 @@ const mongoose = require('./util/connect');
  * then export it as global varable along with mongoose
  */
 
-const server = express();
-server.use(parser.json());
+const app = express();
+app.use(parser.json());
 
-module.exports = server;
+module.exports = app;
 module.exports.mongoose = mongoose;
 
 
@@ -30,8 +30,8 @@ module.exports.mongoose = mongoose;
  * Connection feedback, optional
  */
 
-server.listen(process.env.PORT || 4545, console.log("\nEndpoint Active..."));
-server.get('/', (req, res) => res.json({
+app.listen(process.env.PORT || 4545, console.log("\nEndpoint Active..."));
+app.get('/', (req, res) => res.json({
     message: "USER API Endpoint",
 }));
 
@@ -40,14 +40,14 @@ server.get('/', (req, res) => res.json({
  * Add any additional api routes from api folder
  */
 
-server.use('/user', require('./api/route')); // User API
+app.use('/user', require('./api/route')); // User API
 
 
 /**
  * Automatically send error code 404 for unmatched links
  */
 
-server.use(function(req, res) {
+app.use(function(req, res) {
     res.sendStatus(404);
 });
 
@@ -57,4 +57,4 @@ server.use(function(req, res) {
  */
 
 const listEndpoints = require("express-list-endpoints");
-//console.log(listEndpoints(server));
+//console.log(listEndpoints(app));

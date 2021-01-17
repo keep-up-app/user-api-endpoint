@@ -144,7 +144,7 @@ function find(params) {
                 }));
         }
     });
-};
+}
 
 
 /**
@@ -217,7 +217,7 @@ function update(params, checkExists = true) {
             });
         }
     });
-};
+}
 
 
 /**

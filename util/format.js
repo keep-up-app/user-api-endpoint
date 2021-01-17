@@ -81,9 +81,9 @@ function constructQuery(params) {
         }
         for (var i = 0; i < Object.keys(params).length; i++) {
             var key = Object.keys(params)[i];
-            var values = Object.values(params)[i];
-            if (Array.isArray(values)) query += `${key}=${Array.prototype.join.call(values, '+')}`
-            else query += `${key}=${values}`;
+            var v = Object.values(params)[i];
+            if (Array.isArray(v)) query += `${key}=${Array.prototype.join.call(v, '+')}`
+            else query += `${key}=${v}`;
             query += '&'
         }
         return query;
